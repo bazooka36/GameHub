@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameHub - Мир игр</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        
+        /* Theme Variables */
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #1e40af;
+            --background: #0f172a;
+            --text: #e2e8f0;
+            --card: #1e293b;
+            --transition-speed: 0.3s;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+        }
+
+        /* Modern Card Design */
+        .game-card {
+            background: var(--card);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.2);
+        }
+
+        /* Smooth Animations */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Modern Navigation */
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* Mobile Improvements */
+        @media (max-width: 768px) {
+            .mobile-menu {
+                background: var(--card);
+                border-radius: 1rem;
+                margin: 1rem;
+                padding: 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            }
+
+            .mobile-menu-item {
+                padding: 1rem;
+                border-radius: 0.5rem;
+                margin: 0.5rem 0;
+                transition: background-color 0.3s ease;
+            }
+
+            .mobile-menu-item:hover {
+                background-color: rgba(255,255,255,0.1);
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--primary-color);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Auth Modal Styles */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-content {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid #334155;
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 0.75rem;
+            cursor: pointer;
+            color: #94a3b8;
+            transition: all 0.3s ease;
+        }
+
+        .auth-tab.active {
+            color: #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+            margin-bottom: -2px;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background-color: #334155;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .auth-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .auth-form button:hover {
+            background-color: #2563eb;
+        }
+
+        .error-message {
+            color: #ef4444;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        .success-message {
+            color: #10b981;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+
+        /* Burger Menu Styles */
+        .burger-menu {
+            position: relative;
+            display: none; /* Hide burger menu by default */
+        }
+
+        .burger-menu.active {
+            display: block;
+        }
+
+        .burger-menu-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #1e293b;
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+            border-radius: 0.5rem;
+            z-index: 1000;
+        }
+
+        .burger-menu.active .burger-menu-content {
+            display: block;
+        }
+
+        .burger-menu-button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .burger-menu-item {
+            padding: 0.75rem 1rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .burger-menu-item:hover {
+            background-color: #334155;
+        }
+
+        .burger-menu-item i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+        }
+
+        .burger-menu-divider {
+            height: 1px;
+            background-color: #334155;
+            margin: 0.5rem 0;
+        }
+
+        .submenu {
+            display: none;
+            background-color: #1a2234;
+            padding: 0.5rem 0;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu-item {
+            padding: 0.75rem 1rem 0.75rem 2.5rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .submenu-item:hover {
+            background-color: #334155;
+        }
+
+        .submenu-item i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+        }
+
+        .mobile-submenu {
+            display: none;
+            background-color: #1a2234;
+            padding: 0.5rem 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .mobile-submenu.active {
+            display: block !important;
+            max-height: 500px;
+            transition: max-height 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .mobile-submenu-item {
+            padding: 0.75rem 1rem 0.75rem 3rem;
+            color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .mobile-submenu-item:hover {
+            background-color: #334155;
+        }
+
+        .mobile-submenu-item i {
+            margin-right: 0.75rem;
+            width: 1.25rem;
+        }
+
+        /* Profile Modal Styles */
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-modal.active {
+            display: flex;
+        }
+
+        .profile-content {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            background-color: #334155;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .profile-avatar:hover .profile-avatar-overlay {
+            opacity: 1;
+        }
+
+        .profile-id {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .profile-form {
+            margin-top: 2rem;
+        }
+
+        .profile-form input {
+            width: 100%;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            background-color: #334155;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            color: white;
+        }
+
+        .profile-form input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .profile-form button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .profile-form button:hover {
+            background-color: #2563eb;
+        }
+
+        .profile-message {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .profile-message.success {
+            color: #10b981;
+        }
+
+        .profile-message.error {
+            color: #ef4444;
+        }
+
+        /* Friends Modal Styles */
+        .friends-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .friends-modal.active {
+            display: flex;
+        }
+
+        .friends-content {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .friends-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .friends-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .friends-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: #334155;
+            transition: background-color 0.3s;
+        }
+
+        .friend-item:hover {
+            background-color: #475569;
+        }
+
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+
+        .friend-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+
+        .friend-status {
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-dot.online {
+            background-color: #10b981;
+        }
+
+        .status-dot.offline {
+            background-color: #6b7280;
+        }
+
+        .friend-status-text {
+            color: #94a3b8;
+        }
+
+        .no-friends {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+
+        .no-friends i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        .no-friends-text {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .no-friends-subtext {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .add-friend-button {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s;
+        }
+
+        .add-friend-button:hover {
+            background-color: #2563eb;
+        }
+
+        .add-friend-button i {
+            margin-right: 0.5rem;
+        }
+
+        .search-container {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #334155;
+            border: 1px solid #475569;
+            border-radius: 0.5rem;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .search-button {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+
+        .user-not-found {
+            text-align: center;
+            padding: 2rem;
+            color: #94a3b8;
+        }
+
+        .user-not-found i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #475569;
+        }
+
+        .user-not-found-text {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-result {
+            background-color: #334155;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .search-result-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-result-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .search-result-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+
+        .search-result-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .search-result-name {
+            color: white;
+            font-weight: 500;
+        }
+
+        .search-result-id {
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .request-sent {
+            background-color: #10b981;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            pointer-events: none;
+        }
+
+        .request-sent i {
+            margin-right: 0.5rem;
+        }
+
+        html, body, .main, .overflow-auto, .overflow-scroll {
+            scrollbar-width: thin !important;
+            scrollbar-color: #555 transparent !important;
+        }
+        html::-webkit-scrollbar, body::-webkit-scrollbar, .main::-webkit-scrollbar, .overflow-auto::-webkit-scrollbar, .overflow-scroll::-webkit-scrollbar {
+            width: 4px !important;
+            background: transparent !important;
+        }
+        html::-webkit-scrollbar-thumb, body::-webkit-scrollbar-thumb, .main::-webkit-scrollbar-thumb, .overflow-auto::-webkit-scrollbar-thumb, .overflow-scroll::-webkit-scrollbar-thumb {
+            background: #555 !important;
+            border-radius: 8px !important;
+            min-height: 40px !important;
+            transition: background 0.3s !important;
+        }
+        html::-webkit-scrollbar-thumb:hover, body::-webkit-scrollbar-thumb:hover, .main::-webkit-scrollbar-thumb:hover, .overflow-auto::-webkit-scrollbar-thumb:hover, .overflow-scroll::-webkit-scrollbar-thumb:hover {
+            background: #666 !important;
+        }
+        html::-webkit-scrollbar-track, body::-webkit-scrollbar-track, .main::-webkit-scrollbar-track, .overflow-auto::-webkit-scrollbar-track, .overflow-scroll::-webkit-scrollbar-track {
+            background: transparent !important;
+        }
+
+        /* Toast Notifications */
+        .toast {
+            min-width: 220px;
+            max-width: 350px;
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem;
+            color: #fff;
+            font-weight: 500;
+            box-shadow: 0 4px 24px 0 rgba(0,0,0,0.18);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: toast-in 0.4s forwards, toast-out 0.4s 3.6s forwards;
+            position: relative;
+        }
+        .toast-success { background: linear-gradient(90deg, #10b981, #3b82f6); }
+        .toast-error { background: linear-gradient(90deg, #ef4444, #f59e42); }
+        .toast-info { background: linear-gradient(90deg, #3b82f6, #6366f1); }
+        .toast-warning { background: linear-gradient(90deg, #f59e42, #fbbf24); }
+        .toast .toast-close {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.1rem;
+            margin-left: 0.5rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .toast .toast-close:hover { opacity: 1; }
+        @keyframes toast-in {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toast-out {
+            to { opacity: 0; transform: translateY(30px); }
+        }
+
+        #notification-history-btn {
+            box-shadow: 0 4px 24px 0 rgba(59,130,246,0.18);
+        }
+        #notification-history-btn .fa-bell {
+            font-size: 1.7rem;
+        }
+        #notification-history-modal {
+            min-width: 320px;
+            max-width: 90vw;
+            animation: fadeInNotif 0.25s;
+        }
+        @keyframes fadeInNotif {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .notification-history-item {
+            background: #232946;
+            border-radius: 0.75rem;
+            color: #fff;
+            padding: 0.75rem 1rem;
+            font-size: 0.97rem;
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            box-shadow: 0 2px 8px 0 rgba(0,0,0,0.08);
+        }
+        .notification-history-item .notif-time {
+            color: #94a3b8;
+            font-size: 0.8em;
+            margin-left: auto;
+        }
+        .notification-history-item.success { border-left: 4px solid #10b981; }
+        .notification-history-item.error { border-left: 4px solid #ef4444; }
+        .notification-history-item.info { border-left: 4px solid #3b82f6; }
+        .notification-history-item.warning { border-left: 4px solid #f59e42; }
+
+        /* Slider Styles */
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            height: 100%;
+        }
+
+        .slider-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .slider-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slider-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .slider-nav {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .slider-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .slider-dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+        }
+
+        .slider-arrow:hover {
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .slider-arrow.prev {
+            left: 1rem;
+        }
+
+        .slider-arrow.next {
+            right: 1rem;
+        }
+
+        /* Loading Animation Fix */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Mobile Menu Improvements */
+        @media (max-width: 768px) {
+            .burger-menu {
+                display: block;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .nav-links.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--card);
+                padding: 1rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            }
+
+            .nav-link {
+                padding: 1rem;
+                width: 100%;
+                text-align: center;
+            }
+
+            .slider {
+                height: 400px;
+            }
+
+            .slider-arrow {
+                padding: 0.5rem;
+            }
+        }
+
+        .input-eye-btn {
+            position: absolute;
+            right: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            z-index: 2;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.2em;
+            height: 2.2em;
+        }
+        .input-eye-btn:hover {
+            color: #3b82f6;
+        }
+        .relative-input {
+            position: relative;
+        }
+        @media (max-width: 480px) {
+            .input-eye-btn {
+                right: 0.5rem;
+                font-size: 1.2em;
+                width: 2em;
+                height: 2em;
+            }
+            .relative-input input {
+                padding-right: 2.5em;
+            }
+        }
+        @media (min-width: 481px) {
+            .relative-input input {
+                padding-right: 2.7em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-gray-900 bg-opacity-90 backdrop-blur-md sticky top-0 z-50 shadow-lg relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 relative">
+                <div class="flex items-center flex-shrink-0">
+                    <span class="text-2xl font-bold text-white">
+                        <i class="fas fa-gamepad text-blue-500 mr-2"></i>GameHub
+                    </span>
+                </div>
+                <!-- Абсолютно центрированное меню -->
+                <div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                    <div class="flex space-x-8">
+                        <a href="#" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition">Главная</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition">Все игры</a>
+                        <a href="#" class="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-800 transition">Новости</a>
+                    </div>
+                </div>
+                <div class="hidden md:block ml-4">
+                    <div class="ml-4 flex items-center md:ml-6">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition flex items-center" id="register-btn">
+                            <i class="fas fa-user-plus mr-2"></i> Регистрация
+                        </button>
+                        <button class="ml-4 bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium transition flex items-center" id="login-btn">
+                            <i class="fas fa-sign-in-alt mr-2"></i> Вход
+                        </button>
+                        <button class="ml-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md text-sm font-medium transition flex items-center hidden" id="admin-btn">
+                            <i class="fas fa-cog mr-2"></i> Админ
+                        </button>
+                        <div class="burger-menu ml-4">
+                            <button class="burger-menu-button">
+                                <i class="fas fa-bars"></i>
+                            </button>
+                            <div class="burger-menu-content">
+                                <div class="burger-menu-item" id="profile-option">
+                                    <i class="fas fa-user"></i>
+                                    Профиль
+                                </div>
+                                <div class="burger-menu-item" id="friends-option">
+                                    <i class="fas fa-users"></i>
+                                    Друзья
+                                </div>
+                                <div class="burger-menu-item" id="account-option">
+                                    <i class="fas fa-user-shield"></i>
+                                    Аккаунт
+                                </div>
+                                <div class="submenu" id="account-submenu">
+                                    <div class="submenu-item">
+                                        <i class="fas fa-key"></i>
+                                        Изменить пароль
+                                    </div>
+                                    <div class="submenu-item">
+                                        <i class="fas fa-undo"></i>
+                                        Восстановить учетную запись
+                                    </div>
+                                    <div class="submenu-item text-red-400" id="delete-account-btn">
+                                        <i class="fas fa-user-times"></i>
+                                        Удалить аккаунт
+                                    </div>
+                                    <div class="submenu-item text-red-400" id="desktop-logout-btn">
+                                        <i class="fas fa-sign-out-alt"></i>
+                                        Выйти
+                                    </div>
+                                </div>
+                                <div class="burger-menu-divider"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hidden md:hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Главная</a>
+                <a href="#" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Топ игр</a>
+                <a href="#" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800">Новости</a>
+                <div class="mobile-profile-options hidden">
+                    <div class="border-t border-gray-700 mt-2 pt-2">
+                        <a href="#" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800" id="mobile-profile-option">
+                            <i class="fas fa-user mr-2"></i> Профиль
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800" id="mobile-friends-option">
+                            <i class="fas fa-users mr-2"></i> Друзья
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800" id="mobile-account-option">
+                            <i class="fas fa-user-shield mr-2"></i> Аккаунт
+                        </a>
+                        <div class="mobile-submenu" id="mobile-account-submenu">
+                            <a href="#" class="mobile-submenu-item">
+                                <i class="fas fa-key"></i>
+                                Изменить пароль
+                            </a>
+                            <a href="#" class="mobile-submenu-item">
+                                <i class="fas fa-undo"></i>
+                                Восстановить учетную запись
+                            </a>
+                            <a href="#" class="mobile-submenu-item text-red-400" id="delete-account-btn-mobile">
+                                <i class="fas fa-user-times"></i>
+                                Удалить аккаунт
+                            </a>
+                            <a href="#" class="mobile-submenu-item text-red-400" id="mobile-logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Выйти
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-700">
+                <div class="flex items-center px-5 space-x-3">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium w-full" id="mobile-register-btn">
+                        Регистрация
+                    </button>
+                    <button class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium w-full" id="mobile-login-btn">
+                        Вход
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav> <!-- Auth Modal -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-content">
+            <div class="auth-tabs">
+                <div id="show-login" class="auth-tab active">Вход</div>
+                <div id="show-register" class="auth-tab">Регистрация</div>
+            </div>
+            <div id="auth-message"></div>
+            <form id="login-form" class="auth-form active">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+                <div class="text-right mt-2">
+                    <a href="#" id="forgot-password-link" class="text-blue-400 hover:text-blue-600 text-xs">Забыли пароль?</a>
+                </div>
+            </form>
+            <form id="register-form" class="auth-form">
+                <input type="email" id="register-email" placeholder="Email" required>
+                <div class="relative-input mb-2">
+                    <input type="password" id="register-password" placeholder="Пароль" required>
+                </div>
+                <div class="relative-input mb-2">
+                    <input type="password" id="register-password-confirm" placeholder="Подтвердите пароль" required>
+                </div>
+                <button type="button" id="toggle-password-visibility" class="w-full mb-2 py-2 rounded bg-gray-700 text-white hover:bg-gray-600 transition text-sm">Показать пароль</button>
+                <ul id="password-policy" class="text-xs mb-2 pl-4 list-disc">
+                    <li id="policy-length" class="text-gray-400">Минимум 8 символов</li>
+                    <li id="policy-lower" class="text-gray-400">Хотя бы одна строчная буква</li>
+                    <li id="policy-digit" class="text-gray-400">Хотя бы одна цифра</li>
+                </ul>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+  <!-- Game Search Section -->
+  <section class="relative w-full bg-gradient-to-r from-blue-900 via-purple-900 to-indigo-900 py-16">
+    <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+    <div class="relative z-10 max-w-4xl mx-auto text-center px-4">
+        <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 drop-shadow-lg">
+            <i class="fas fa-search text-blue-400 mr-4"></i>
+            Найди свою игру
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-200 mb-8 drop-shadow-lg">
+            Открой для себя тысячи игр в нашей коллекции
+        </p>
+        
+        <!-- Search Bar -->
+        <div class="relative max-w-2xl mx-auto">
+            <div class="relative">
+                <input 
+                    type="text" 
+                    id="game-search" 
+                    placeholder="Поиск игр" 
+                    class="w-full px-6 py-4 text-lg bg-white bg-opacity-95 text-gray-900 rounded-full pl-14 pr-20 focus:outline-none focus:ring-4 focus:ring-blue-500 focus:bg-white shadow-lg"
+                >
+                <i class="fas fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-500 text-xl"></i>
+                <button 
+                    id="search-btn" 
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition duration-300 font-medium"
+                >
+                    Найти
+                </button>
+            </div>
+            
+            <!-- Search Filters -->
+            <div class="flex flex-wrap justify-center gap-3 mt-6">
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="all">
+                    Все игры
+                </button>
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="action">
+                    Экшен
+                </button>
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="rpg">
+                    RPG
+                </button>
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="strategy">
+                    Стратегия
+                </button>
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="sports">
+                    Спорт
+                </button>
+                <button class="search-filter bg-white bg-opacity-20 hover:bg-opacity-30 text-white px-4 py-2 rounded-full transition duration-300" data-filter="adventure">
+                    Приключения
+                </button>
+            </div>
+        </div>
+        
+        <!-- Search Results -->
+        <div id="search-results" class="mt-8 hidden">
+            <div class="bg-white bg-opacity-95 rounded-xl p-6 shadow-xl">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">
+                        <i class="fas fa-list mr-2 text-blue-600"></i>
+                        Результаты поиска
+                    </h3>
+                    <button id="clear-search" class="text-gray-500 hover:text-gray-700 transition">
+                        <i class="fas fa-times mr-1"></i> Очистить
+                    </button>
+                </div>
+                <div id="search-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Search results will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+    
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Popular PC Games Section -->
+        <div class="mb-20">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+                <i class="fas fa-desktop text-blue-500 mr-4"></i> Рекомендации
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="games-container">
+                <!-- Games will be loaded dynamically -->
+            </div>
+        </div>
+        
+        <div class="mt-20">
+            <h2 class="text-3xl font-bold text-white mb-8 flex items-center">
+                <i class="fas fa-newspaper text-blue-500 mr-4"></i> Новости
+            </h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="news-container">
+                <!-- News will be loaded dynamically -->
+            </div>
+            
+            <div class="text-center mt-10">
+                <button class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition border border-gray-700">
+                    Все новости <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+<footer class="bg-gray-900 border-t border-gray-800 mt-20 hidden md:block">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4 flex items-center">
+                    <i class="fas fa-gamepad text-blue-500 mr-2"></i> GameHub
+                </h3>
+                <p class="text-gray-400 text-sm">
+                    Лучший портал для онлайн и оффлайн игр. Присоединяйтесь к нашему сообществу!
+                </p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="https://www.instagram.com/bazooka_official" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://discord.gg/tyCKVa3a" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-white font-medium mb-4">Техподдержка</h4>
+                <p class="text-gray-400 text-sm mb-4">
+                    Если у вас возникли вопросы, пожалуйста свяжитесь с нами
+                </p>
+                <div class="flex">
+                    <input type="email" placeholder="Опишите ваш вопрос" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+            <p class="text-gray-400 text-sm">
+                © 2025 GameHub. Все права защищены.
+            </p>
+            <div class="flex space-x-6 mt-4 md:mt-0">
+                <a href="#" class="text-gray-400 hover:text-white transition text-sm">Правила</a>
+                <a href="#" class="text-gray-400 hover:text-white transition text-sm">Конфиденциальность</a>
+                <a href="#" class="text-gray-400 hover:text-white transition text-sm">Cookies</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="profile-modal">
+        <div class="profile-content">
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar">
+                    <img id="avatar-preview" src="https://via.placeholder.com/150" alt="Profile Avatar">
+                    <div class="profile-avatar-overlay">
+                        <i class="fas fa-camera text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="profile-id" id="profile-id">ID: Loading...</div>
+            </div>
+            <form id="profile-form" class="profile-form">
+                <input type="text" id="username" placeholder="Имя пользователя" required>
+                <button type="submit">Сохранить изменения</button>
+            </form>
+            <div id="profile-message" class="profile-message"></div>
+        </div>
+    </div>
+
+    <!-- Friends Modal -->
+    <div id="friends-modal" class="friends-modal">
+        <div class="friends-content">
+            <div class="friends-header">
+                <div class="friends-title">Друзья</div>
+                <button class="add-friend-button" id="add-friend-button">
+                    <i class="fas fa-user-plus"></i>
+                    Добавить друга
+                </button>
+            </div>
+            <div class="friends-list" id="friends-list">
+                <!-- Friends will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Friend Modal -->
+    <div id="add-friend-modal" class="friends-modal">
+        <div class="friends-content">
+            <div class="friends-header">
+                <div class="friends-title">Добавить друга</div>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" id="friend-id-input" placeholder="Введите ID пользователя">
+                <button class="search-button" id="search-friend-button">
+                    <i class="fas fa-search mr-2"></i>
+                    Найти пользователя
+                </button>
+            </div>
+            <div id="search-result-container">
+                <!-- Search results will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="auth-modal">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4">Изменить пароль</h2>
+            <div id="change-password-message"></div>
+            <form id="change-password-form" class="auth-form active">
+                <input type="password" id="current-password" placeholder="Текущий пароль" required>
+                <input type="password" id="new-password" placeholder="Новый пароль" required>
+                <input type="password" id="confirm-new-password" placeholder="Подтвердите новый пароль" required>
+                <button type="submit">Изменить пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Loading Screen -->
+    <div class="loading" id="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[9999] flex flex-col gap-3 items-end"></div>
+    <!-- Notification History Button -->
+    <button id="notification-history-btn" class="hidden fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg z-[9999] text-2xl transition" title="Уведомления">
+        <i class="fas fa-bell"></i>
+    </button>
+    <!-- Notification History Modal -->
+    <div id="notification-history-modal" class="hidden fixed bottom-24 right-6 bg-gray-900 bg-opacity-95 rounded-xl shadow-2xl w-80 max-h-[60vh] flex flex-col z-[9999] border border-blue-700">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-blue-700">
+            <span class="font-bold text-white text-lg flex items-center gap-2"><i class="fas fa-bell"></i> Уведомления</span>
+            <button id="clear-notifications" class="text-blue-400 hover:text-red-400 transition text-sm">Очистить</button>
+        </div>
+        <div id="notification-history-list" class="flex-1 overflow-y-auto p-4 space-y-3"></div>
+    </div>
+
+    <!-- GameHub Info Modal (только для мобильного) -->
+    <div id="mobile-gamehub-modal" class="fixed inset-0 z-[9999] bg-black bg-opacity-80 flex items-center justify-center hidden md:hidden">
+        <div class="bg-gray-900 rounded-xl p-6 w-[95vw] max-w-md overflow-y-auto max-h-[90vh] relative">
+            <button id="close-mobile-gamehub-modal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4 flex items-center">
+                    <i class="fas fa-gamepad text-blue-500 mr-2"></i> GameHub
+                </h3>
+                <p class="text-gray-400 text-sm mb-6">
+                    Лучший портал для онлайн и оффлайн игр. Присоединяйтесь к нашему сообществу!
+                </p>
+            </div>
+        </div>
+    </div>
+    <div id="mobile-subscribe-modal" class="fixed inset-0 z-[9999] bg-black bg-opacity-80 flex items-center justify-center hidden md:hidden">
+        <div class="bg-gray-900 rounded-xl p-6 w-[95vw] max-w-md overflow-y-auto max-h-[90vh] relative">
+            <button class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl close-mobile-modal">&times;</button>
+            <h4 class="text-white font-medium mb-4">Техподдержка</h4>
+            <p class="text-gray-400 text-sm mb-4">Если у вас возникли вопросы, пожалуйста свяжитесь с нами</p>
+            <div class="flex">
+                <input type="email" placeholder="Ваш email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="reset-password-modal" class="auth-modal">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4">Восстановить учетную запись</h2>
+            <div id="reset-password-message"></div>
+            <form id="reset-password-form" class="auth-form active">
+                <input type="email" id="reset-email" placeholder="Email" required>
+                <button type="submit">Найти аккаунт</button>
+            </form>
+            <form id="set-new-password-form" class="auth-form" style="display:none">
+                <input type="password" id="reset-new-password" placeholder="Новый пароль" required>
+                <input type="password" id="reset-confirm-password" placeholder="Подтвердите новый пароль" required>
+                <button type="submit">Сменить пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="auth-modal">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4">Удалить аккаунт</h2>
+            <p class="text-gray-300 mb-4">Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо.</p>
+            <div id="delete-account-message" class="mb-2"></div>
+            <div class="flex gap-4">
+                <button id="confirm-delete-account" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Удалить</button>
+                <button id="cancel-delete-account" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Отмена</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Мобильное меню
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (!mobileMenuButton || !mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+        // Dynamic Content Loading
+        function loadGames() {
+            const games = JSON.parse(localStorage.getItem('games') || '[]');
+            const gamesContainer = document.getElementById('games-container');
+            
+            if (games.length === 0) {
+                gamesContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-gamepad text-6xl text-gray-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-400 mb-2">Игры не найдены</h3>
+                        <p class="text-gray-500">Администратор еще не добавил игры</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const gamesHtml = games.map(game => `
+                <div class="game-card">
+                    <div class="relative overflow-hidden">
+                        <img src="${game.image}" alt="${game.title}" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
+                            ${game.category}
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">${game.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${game.description}</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-400 font-semibold">${game.price}</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                Подробнее
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            gamesContainer.innerHTML = gamesHtml;
+        }
+
+        function loadNews() {
+            const news = JSON.parse(localStorage.getItem('news') || '[]');
+            const newsContainer = document.getElementById('news-container');
+            
+            if (news.length === 0) {
+                newsContainer.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-newspaper text-6xl text-gray-600 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-400 mb-2">Новости не найдены</h3>
+                        <p class="text-gray-500">Администратор еще не добавил новости</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const newsHtml = news.map(item => `
+                <div class="bg-gray-800 rounded-xl overflow-hidden hover:transform hover:scale-105 transition duration-300">
+                    <div class="relative overflow-hidden">
+                        <img src="${item.image}" alt="${item.title}" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded text-sm">
+                            Новость
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-white mb-2">${item.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4">${item.content.substring(0, 150)}...</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-sm">${new Date(item.date).toLocaleDateString('ru-RU')}</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                Читать
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            newsContainer.innerHTML = newsHtml;
+        }
+
+        // Game Search Functionality
+        const gameSearch = document.getElementById('game-search');
+        const searchBtn = document.getElementById('search-btn');
+        const searchResults = document.getElementById('search-results');
+        const searchResultsContainer = document.getElementById('search-results-container');
+        const clearSearch = document.getElementById('clear-search');
+        const searchFilters = document.querySelectorAll('.search-filter');
+
+        function performSearch() {
+            const query = gameSearch.value.toLowerCase().trim();
+            const games = JSON.parse(localStorage.getItem('games') || '[]');
+            
+            if (!query) {
+                searchResults.classList.add('hidden');
+                return;
+            }
+            
+            const filteredGames = games.filter(game => 
+                game.title.toLowerCase().includes(query) ||
+                game.description.toLowerCase().includes(query) ||
+                game.category.toLowerCase().includes(query)
+            );
+            
+            if (filteredGames.length === 0) {
+                searchResultsContainer.innerHTML = `
+                    <div class="text-center py-8">
+                        <i class="fas fa-search text-4xl text-gray-400 mb-4"></i>
+                        <p class="text-gray-500">Игры не найдены</p>
+                    </div>
+                `;
+            } else {
+                const resultsHtml = filteredGames.map(game => `
+                    <div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition">
+                        <div class="flex items-center space-x-4">
+                            <img src="${game.image}" alt="${game.title}" class="w-16 h-16 object-cover rounded">
+                            <div class="flex-1">
+                                <h4 class="text-white font-semibold">${game.title}</h4>
+                                <p class="text-gray-400 text-sm">${game.category}</p>
+                                <p class="text-blue-400 font-semibold">${game.price}</p>
+                            </div>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                Подробнее
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                searchResultsContainer.innerHTML = resultsHtml;
+            }
+            
+            searchResults.classList.remove('hidden');
+        }
+
+        if (searchBtn) {
+            searchBtn.addEventListener('click', performSearch);
+        }
+
+        if (gameSearch) {
+            gameSearch.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+        }
+
+        if (clearSearch) {
+            clearSearch.addEventListener('click', () => {
+                gameSearch.value = '';
+                searchResults.classList.add('hidden');
+            });
+        }
+
+        // Search filters
+        searchFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                searchFilters.forEach(f => f.classList.remove('bg-blue-600'));
+                filter.classList.add('bg-blue-600');
+                
+                const category = filter.dataset.filter;
+                const games = JSON.parse(localStorage.getItem('games') || '[]');
+                
+                if (category === 'all') {
+                    loadGames();
+                } else {
+                    const filteredGames = games.filter(game => 
+                        game.category.toLowerCase() === category
+                    );
+                    
+                    const gamesContainer = document.getElementById('games-container');
+                    if (filteredGames.length === 0) {
+                        gamesContainer.innerHTML = `
+                            <div class="col-span-full text-center py-12">
+                                <i class="fas fa-gamepad text-6xl text-gray-600 mb-4"></i>
+                                <h3 class="text-xl font-bold text-gray-400 mb-2">Игры не найдены</h3>
+                                <p class="text-gray-500">В этой категории пока нет игр</p>
+                            </div>
+                        `;
+                    } else {
+                        const gamesHtml = filteredGames.map(game => `
+                            <div class="game-card">
+                                <div class="relative overflow-hidden">
+                                    <img src="${game.image}" alt="${game.title}" class="w-full h-48 object-cover">
+                                    <div class="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded text-sm">
+                                        ${game.category}
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <h3 class="text-xl font-bold text-white mb-2">${game.title}</h3>
+                                    <p class="text-gray-400 text-sm mb-4">${game.description}</p>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-blue-400 font-semibold">${game.price}</span>
+                                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded transition">
+                                            Подробнее
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('');
+                        
+                        gamesContainer.innerHTML = gamesHtml;
+                    }
+                }
+            });
+        });
+
+        // Initialize content on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadGames();
+            loadNews();
+        });
+
+        // Toast Notification System
+        function showNotification(type, message) {
+            addToNotificationHistory(type, message);
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                info: 'fas fa-info-circle',
+                warning: 'fas fa-exclamation-triangle'
+            };
+            
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <i class="${icons[type]}"></i>
+                <span>${message}</span>
+                <button class="toast-close" onclick="this.parentElement.remove()">&times;</button>
+            `;
+            
+            container.appendChild(toast);
+            
+            // Auto remove after 4 seconds
+            setTimeout(() => {
+                if (toast.parentElement) {
+                    toast.remove();
+                }
+            }, 4000);
+        }
+
+        // Notification History
+        let notificationHistory = JSON.parse(localStorage.getItem('notificationHistory') || '[]');
+
+        function addToNotificationHistory(type, message) {
+            const notification = {
+                type,
+                message,
+                timestamp: new Date().toISOString()
+            };
+            
+            notificationHistory.unshift(notification);
+            
+            // Keep only last 50 notifications
+            if (notificationHistory.length > 50) {
+                notificationHistory = notificationHistory.slice(0, 50);
+            }
+            
+            localStorage.setItem('notificationHistory', JSON.stringify(notificationHistory));
+        }
+
+        function loadNotificationHistory() {
+            const historyList = document.getElementById('notification-history-list');
+            if (!historyList) return;
+            
+            if (notificationHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="text-center py-8 text-gray-400">
+                        <i class="fas fa-bell text-4xl mb-4"></i>
+                        <p>Нет уведомлений</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const historyHtml = notificationHistory.map(notification => `
+                <div class="notification-history-item ${notification.type}">
+                    <i class="fas fa-${notification.type === 'success' ? 'check-circle' : 
+                                       notification.type === 'error' ? 'exclamation-circle' : 
+                                       notification.type === 'warning' ? 'exclamation-triangle' : 
+                                       'info-circle'}"></i>
+                    <span>${notification.message}</span>
+                    <span class="notif-time">${new Date(notification.timestamp).toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'})}</span>
+                </div>
+            `).join('');
+            
+            historyList.innerHTML = historyHtml;
+        }
+
+        // Notification History Button
+        const notificationHistoryBtn = document.getElementById('notification-history-btn');
+        const notificationHistoryModal = document.getElementById('notification-history-modal');
+        const clearNotifications = document.getElementById('clear-notifications');
+
+        if (notificationHistoryBtn) {
+            notificationHistoryBtn.addEventListener('click', () => {
+                notificationHistoryModal.classList.toggle('hidden');
+                loadNotificationHistory();
+            });
+        }
+
+        if (clearNotifications) {
+            clearNotifications.addEventListener('click', () => {
+                notificationHistory = [];
+                localStorage.setItem('notificationHistory', JSON.stringify(notificationHistory));
+                loadNotificationHistory();
+            });
+        }
+
+        // Close notification history modal when clicking outside
+        if (notificationHistoryModal) {
+            notificationHistoryModal.addEventListener('click', (e) => {
+                if (e.target === notificationHistoryModal) {
+                    notificationHistoryModal.classList.add('hidden');
+                }
+            });
+        }
+
+        // Show/hide notification history button based on login status
+        function showNotificationHistoryBtn() {
+            if (notificationHistoryBtn) {
+                notificationHistoryBtn.classList.remove('hidden');
+            }
+        }
+
+        function hideNotificationHistoryBtn() {
+            if (notificationHistoryBtn) {
+                notificationHistoryBtn.classList.add('hidden');
+            }
+        }
+        
+        // Удалён код для онлайн/оффлайн вкладок, чтобы не было ошибки
+
+        // Authentication functionality
+        const authModal = document.getElementById('auth-modal');
+        const showLoginTab = document.getElementById('show-login');
+        const showRegisterTab = document.getElementById('show-register');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const authMessage = document.getElementById('auth-message');
+        const burgerMenuButton = document.querySelector('.burger-menu-button');
+        const burgerMenu = document.querySelector('.burger-menu');
+        const mobileProfileOptions = document.querySelector('.mobile-profile-options');
+
+        // Show auth modal
+        function showAuthModal() {
+            authModal.classList.add('active');
+            authMessage.textContent = '';
+            loginForm.reset();
+            registerForm.reset();
+        }
+
+        // Hide auth modal
+        function hideAuthModal() {
+            authModal.classList.remove('active');
+            authMessage.textContent = '';
+            loginForm.reset();
+            registerForm.reset();
+        }
+
+        // Switch between login and register tabs
+        showLoginTab.addEventListener('click', () => {
+            showLoginTab.classList.add('active');
+            showRegisterTab.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+            authMessage.textContent = '';
+        });
+
+        showRegisterTab.addEventListener('click', () => {
+            showRegisterTab.classList.add('active');
+            showLoginTab.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+            authMessage.textContent = '';
+        });
+
+        // Add click handlers for register buttons
+        document.getElementById('register-btn').addEventListener('click', () => {
+            showAuthModal();
+            showRegisterTab.click();
+        });
+
+        document.getElementById('mobile-register-btn').addEventListener('click', () => {
+            showAuthModal();
+            showRegisterTab.click();
+        });
+
+        // Add click handlers for login buttons
+        document.getElementById('login-btn').addEventListener('click', () => {
+            showAuthModal();
+            showLoginTab.click();
+        });
+
+        document.getElementById('mobile-login-btn').addEventListener('click', () => {
+            showAuthModal();
+            showLoginTab.click();
+        });
+
+        // Handle registration
+        registerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirmPassword = document.getElementById('register-password-confirm').value;
+
+            if (!validatePasswordPolicy(password)) {
+                authMessage.textContent = 'Пароль не соответствует требованиям безопасности.';
+                authMessage.className = 'error-message';
+                showNotification('error', 'Пароль не соответствует требованиям безопасности.');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                authMessage.textContent = 'Пароли не совпадают';
+                authMessage.className = 'error-message';
+                showNotification('error', 'Пароли не совпадают');
+                return;
+            }
+
+            // Get existing users or initialize empty array
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+
+            // Check if user already exists
+            if (users.some(user => user.email === email)) {
+                authMessage.textContent = 'Пользователь с таким email уже существует';
+                authMessage.className = 'error-message';
+                showNotification('error', 'Пользователь с таким email уже существует');
+                return;
+            }
+
+            // Generate unique ID for new user
+            const userId = 'GH' + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+            // Add new user with permanent ID
+            const newUser = {
+                email,
+                password,
+                id: userId,
+                username: email.split('@')[0], // Default username from email
+                avatar: null
+            };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+
+            // Save current user immediately after registration
+            localStorage.setItem('currentUser', JSON.stringify(newUser));
+
+            authMessage.textContent = 'Регистрация успешна!';
+            authMessage.className = 'success-message';
+            showNotification('success', 'Регистрация успешна!');
+
+            // Автоматически логиним пользователя и обновляем UI
+            updateUIForLoggedInUser(newUser.email);
+            setTimeout(hideAuthModal, 1500);
+        });
+
+        // Handle login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            // Get users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+
+            if (user) {
+                // Save logged in user
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                
+                authMessage.textContent = 'Вход выполнен успешно!';
+                authMessage.className = 'success-message';
+                showNotification('success', 'Вход выполнен успешно!');
+                
+                // Update UI for logged in user
+                updateUIForLoggedInUser(user.email);
+                
+                // Hide modal after successful login
+                setTimeout(hideAuthModal, 1500);
+            } else {
+                authMessage.textContent = 'Неверный email или пароль';
+                authMessage.className = 'error-message';
+                showNotification('error', 'Неверный email или пароль');
+            }
+        });
+
+        // Update UI for logged in user
+        function updateUIForLoggedInUser(email) {
+            // Hide auth buttons (desktop and mobile)
+            const authButtons = document.querySelectorAll('#register-btn, #login-btn, #mobile-register-btn, #mobile-login-btn');
+            authButtons.forEach(btn => {
+                btn.style.display = 'none';
+            });
+            // Show burger menu button
+            burgerMenu.style.display = 'block';
+            // Show profile options in mobile menu
+            mobileProfileOptions.classList.remove('hidden');
+            // Generate and save user ID if not exists
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser && !currentUser.id) {
+                currentUser.id = generateUniqueId();
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+            showNotificationHistoryBtn();
+        }
+
+        // Burger menu toggle 
+        if (burgerMenuButton && burgerMenu) {
+        burgerMenuButton.addEventListener('click', (e) => {
+             e.stopPropagation();
+             burgerMenu.classList.toggle('active');
+        });
+}
+
+        // Close burger menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!burgerMenu.contains(e.target)) {
+                burgerMenu.classList.remove('active');
+            }
+        });
+
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('currentUser');
+            // Hide burger menu
+            burgerMenu.style.display = 'none';
+            // Show auth buttons (desktop and mobile)
+            const authButtons = document.querySelectorAll('#register-btn, #login-btn, #mobile-register-btn, #mobile-login-btn');
+            authButtons.forEach(btn => {
+                btn.style.display = '';
+            });
+            // Hide mobile profile options
+            mobileProfileOptions.classList.add('hidden');
+            hideNotificationHistoryBtn();
+            updateAuthUI();
+            location.reload();
+        }
+
+        // Add logout handlers
+        const desktopLogoutBtn = document.getElementById('desktop-logout-btn');
+        if (desktopLogoutBtn) {
+        desktopLogoutBtn.addEventListener('click', handleLogout);
+       }
+        const mobileLogoutBtn = document.getElementById('mobile-logout-btn');
+        if (mobileLogoutBtn) {
+        mobileLogoutBtn.addEventListener('click', handleLogout);
+        }
+
+        // Add click handlers for auth buttons
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check for logged in user
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                updateUIForLoggedInUser(currentUser.email);
+            }
+
+            // Account submenu toggle for desktop
+            const accountOption = document.getElementById('account-option');
+            const accountSubmenu = document.getElementById('account-submenu');
+            
+            accountOption.addEventListener('click', (e) => {
+                e.stopPropagation();
+                accountSubmenu.classList.toggle('active');
+            });
+
+            // Account submenu toggle for mobile
+            const mobileAccountOption = document.getElementById('mobile-account-option');
+            const mobileAccountSubmenu = document.getElementById('mobile-account-submenu');
+            
+            mobileAccountOption.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                mobileAccountSubmenu.classList.toggle('active');
+            });
+
+            // Close submenus when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!accountSubmenu.contains(e.target) && !accountOption.contains(e.target)) {
+                    accountSubmenu.classList.remove('active');
+                }
+                if (!mobileAccountSubmenu.contains(e.target) && !mobileAccountOption.contains(e.target)) {
+                    mobileAccountSubmenu.classList.remove('active');
+                }
+            });
+
+            // Add click handlers for register buttons
+            const registerButtons = document.querySelectorAll('#register-btn, #mobile-register-btn');
+            registerButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showAuthModal();
+                    showRegisterTab.click();
+                });
+            });
+
+            // Add click handlers for login buttons
+            const loginButtons = document.querySelectorAll('#login-btn, #mobile-login-btn');
+            loginButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    showAuthModal();
+                    showLoginTab.click();
+                });
+            });
+
+            // Close modal when clicking outside
+            authModal.addEventListener('click', (e) => {
+                if (e.target === authModal) {
+                    hideAuthModal();
+                }
+            });
+        });
+
+        // Анимация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                }, index * 100);
+            });
+        });
+
+        // Profile functionality
+        const profileModal = document.getElementById('profile-modal');
+        const profileOption = document.getElementById('profile-option');
+        const mobileProfileOption = document.getElementById('mobile-profile-option');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const profileForm = document.getElementById('profile-form');
+        const usernameInput = document.getElementById('username');
+        const profileId = document.getElementById('profile-id');
+        const profileMessage = document.getElementById('profile-message');
+
+        // Generate unique ID
+        function generateUniqueId() {
+            return 'GH' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        }
+
+        // Show profile modal
+        function showProfileModal() {
+            profileModal.classList.add('active');
+            loadProfileData();
+        }
+
+        // Hide profile modal
+        function hideProfileModal() {
+            profileModal.classList.remove('active');
+            profileMessage.textContent = '';
+        }
+
+        // Load profile data
+        function loadProfileData() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                // Load or generate user ID
+                if (!currentUser.id) {
+                    currentUser.id = generateUniqueId();
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                }
+                profileId.textContent = `ID: ${currentUser.id}`;
+
+                // Load username
+                if (currentUser.username) {
+                    usernameInput.value = currentUser.username;
+                }
+
+                // Load avatar
+                if (currentUser.avatar) {
+                    avatarPreview.src = currentUser.avatar;
+                }
+            }
+        }
+
+        // Handle profile photo upload
+        if (profileAvatar) {
+        profileAvatar.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        avatarPreview.src = e.target.result;
+                        // Save avatar to user data
+                        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+                        if (currentUser) {
+                            currentUser.avatar = e.target.result;
+                            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                        }
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        });
+    }
+        // Handle profile form submission
+        if (profileForm) {
+        profileForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = usernameInput.value.trim();
+            
+            if (username.length < 3) {
+                profileMessage.textContent = 'Имя пользователя должно содержать минимум 3 символа';
+                profileMessage.className = 'profile-message error';
+                return;
+            }
+
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                currentUser.username = username;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                
+                profileMessage.textContent = 'Изменения сохранены';
+                profileMessage.className = 'profile-message success';
+                
+                setTimeout(() => {
+                    hideProfileModal();
+                }, 1500);
+            }
+        });
+    }
+        // Add click handlers for profile options
+    if (profileOption) {
+        profileOption.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showProfileModal();
+    });
+}
+        if (mobileProfileOption) {
+            mobileProfileOption.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showProfileModal();
+            });
+        }
+       
+        // Close profile modal when clicking outside
+       if (profileModal) {
+           profileModal.addEventListener('click', (e) => {
+            if (e.target === profileModal) {
+                hideProfileModal();
+            }
+        }); 
+    }
+        // Friends functionality
+        const friendsModal = document.getElementById('friends-modal');
+        const friendsOption = document.getElementById('friends-option');
+        const mobileFriendsOption = document.getElementById('mobile-friends-option');
+        const friendsList = document.getElementById('friends-list');
+
+        // Show friends modal
+        function showFriendsModal() {
+            friendsModal.classList.add('active');
+            loadFriendsList();
+        }
+
+        // Hide friends modal
+        function hideFriendsModal() {
+            friendsModal.classList.remove('active');
+        }
+
+        // Load friends list
+        function loadFriendsList() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                // Get friends list from localStorage
+                const friends = JSON.parse(localStorage.getItem(`friends_${currentUser.id}`) || '[]');
+                
+                if (friends.length === 0) {
+                    // Show no friends message
+                    friendsList.innerHTML = `
+                        <div class="no-friends">
+                            <i class="fas fa-user-friends"></i>
+                            <div class="no-friends-text">У вас нет друзей :(</div>
+                            <div class="no-friends-subtext">Добавляйте друзей, чтобы видеть их статус и играть вместе</div>
+                        </div>
+                    `;
+                } else {
+                    // Show friends list
+                    friendsList.innerHTML = friends.map(friend => `
+                        <div class="friend-item">
+                            <div class="friend-avatar">
+                                <img src="${friend.avatar || 'https://via.placeholder.com/40'}" alt="${friend.username}">
+                            </div>
+                            <div class="friend-info">
+                                <div class="friend-name">${friend.username}</div>
+                                <div class="friend-status">
+                                    <div class="status-dot ${friend.online ? 'online' : 'offline'}"></div>
+                                    <span class="friend-status-text">${friend.online ? 'В сети' : 'Не в сети'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        }
+
+        // Add click handlers for friends options
+    if (friendsOption) {
+        friendsOption.addEventListener('click', (e) => {
+        e.stopPropagation();
+        showFriendsModal();
+    });
+    }
+
+        if (mobileFriendsOption) {
+            mobileFriendsOption.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                showFriendsModal();
+            });
+        }
+
+        // Close friends modal when clicking outside
+       if (friendsModal) {
+           friendsModal.addEventListener('click', (e) => {
+       if (e.target === friendsModal) {
+            hideFriendsModal();
+        }
+    });
+}
+
+        // Add Friend functionality
+        const addFriendModal = document.getElementById('add-friend-modal');
+        const addFriendButton = document.getElementById('add-friend-button');
+        const friendIdInput = document.getElementById('friend-id-input');
+        const searchFriendButton = document.getElementById('search-friend-button');
+        const searchResultContainer = document.getElementById('search-result-container');
+
+        // Show add friend modal
+        function showAddFriendModal() {
+            addFriendModal.classList.add('active');
+            friendIdInput.value = '';
+            searchResultContainer.innerHTML = '';
+        }
+
+        // Hide add friend modal
+        function hideAddFriendModal() {
+            addFriendModal.classList.remove('active');
+        }
+
+        // Search for user by ID
+        function searchUserById() {
+            const searchId = friendIdInput.value.trim();
+            if (!searchId) return;
+
+            // Get all users from localStorage
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            
+            // Find user with matching ID
+            const foundUser = users.find(user => user.id === searchId);
+
+            if (!foundUser) {
+                // Пользователь не найден
+                searchResultContainer.innerHTML = `
+                    <div class="user-not-found">
+                        <i class="fas fa-user-slash"></i>
+                        <div class="user-not-found-text">Такого пользователя не существует :(</div>
+                    </div>
+                `;
+                showNotification('error', 'Такого пользователя не существует');
+            } else if (foundUser.id === currentUser.id) {
+                // Пользователь ищет сам себя
+                searchResultContainer.innerHTML = `
+                    <div class="user-not-found">
+                        <i class="fas fa-user-slash"></i>
+                        <div class="user-not-found-text">Вы не можете добавить себя в друзья</div>
+                    </div>
+                `;
+                showNotification('info', 'Вы не можете добавить себя в друзья');
+            } else {
+                // Show user found
+                const isFriend = JSON.parse(localStorage.getItem(`friends_${currentUser.id}`) || '[]')
+                    .some(friend => friend.id === foundUser.id);
+                
+                const hasRequest = JSON.parse(localStorage.getItem(`friend_requests_${foundUser.id}`) || '[]')
+                    .some(request => request.id === currentUser.id);
+
+                searchResultContainer.innerHTML = `
+                    <div class="search-result">
+                        <div class="search-result-item">
+                            <div class="search-result-info">
+                                <div class="search-result-avatar">
+                                    <img src="${foundUser.avatar || 'https://via.placeholder.com/40'}" alt="${foundUser.username}">
+                                </div>
+                                <div>
+                                    <div class="search-result-name">${foundUser.username}</div>
+                                    <div class="search-result-id">ID: ${foundUser.id}</div>
+                                </div>
+                            </div>
+                            ${isFriend ? 
+                                '<div class="request-sent"><i class="fas fa-check"></i> Уже в друзьях</div>' :
+                                hasRequest ?
+                                '<div class="request-sent"><i class="fas fa-clock"></i> Запрос отправлен</div>' :
+                                `<button class="add-friend-button" onclick="sendFriendRequest('${foundUser.id}')">
+                                    <i class="fas fa-plus"></i>
+                                    Добавить
+                                </button>`
+                            }
+                        </div>
+                    </div>
+                `;
+                if (isFriend) showNotification('info', 'Этот пользователь уже у вас в друзьях');
+                if (hasRequest) showNotification('info', 'Запрос уже отправлен');
+            }
+        }
+
+        // Send friend request
+        function sendFriendRequest(targetUserId) {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) return;
+
+            // Get existing requests
+            const requests = JSON.parse(localStorage.getItem(`friend_requests_${targetUserId}`) || '[]');
+            
+            // Add new request if not already sent
+            if (!requests.some(request => request.id === currentUser.id)) {
+                requests.push({
+                    id: currentUser.id,
+                    username: currentUser.username,
+                    avatar: currentUser.avatar
+                });
+                localStorage.setItem(`friend_requests_${targetUserId}`, JSON.stringify(requests));
+                showNotification('success', 'Запрос в друзья отправлен!');
+            } else {
+                showNotification('info', 'Запрос уже был отправлен');
+            }
+
+            // Update UI to show request sent
+            searchResultContainer.innerHTML = `
+                <div class="search-result">
+                    <div class="search-result-item">
+                        <div class="search-result-info">
+                            <div class="search-result-avatar">
+                                <img src="${currentUser.avatar || 'https://via.placeholder.com/40'}" alt="${currentUser.username}">
+                            </div>
+                            <div>
+                                <div class="search-result-name">${currentUser.username}</div>
+                                <div class="search-result-id">ID: ${currentUser.id}</div>
+                            </div>
+                        </div>
+                        <div class="request-sent">
+                            <i class="fas fa-clock"></i>
+                            Запрос отправлен
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        window.sendFriendRequest = sendFriendRequest;
+
+        // Add click handlers for add friend functionality
+   if (addFriendButton) {
+       addFriendButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        hideFriendsModal();
+        showAddFriendModal();
+    });
+ }
+        if (searchFriendButton) {
+            searchFriendButton.addEventListener('click', searchUserById);
+ }
+        if (friendIdInput) {
+            friendIdInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            searchUserById();
+        }
+    });
+ }
+
+        // Close add friend modal when clicking outside
+        if (addFriendModal) {
+            addFriendModal.addEventListener('click', (e) => {
+        if (e.target === addFriendModal) {
+            hideAddFriendModal();
+        }
+    });
+ }
+
+        // Change Password functionality
+        const changePasswordModal = document.getElementById('change-password-modal');
+        const changePasswordForm = document.getElementById('change-password-form');
+        const changePasswordMessage = document.getElementById('change-password-message');
+
+        // Show change password modal
+        function showChangePasswordModal() {
+            changePasswordModal.classList.add('active');
+            changePasswordMessage.textContent = '';
+            changePasswordForm.reset();
+        }
+
+        // Hide change password modal
+        function hideChangePasswordModal() {
+            changePasswordModal.classList.remove('active');
+            changePasswordMessage.textContent = '';
+            changePasswordForm.reset();
+        }
+
+        // Handle change password form submission
+        if (changePasswordForm) {
+            changePasswordForm.addEventListener('submit', (e) => {
+        e.preventDefault(); 
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmNewPassword = document.getElementById('confirm-new-password').value;
+       
+            // Get current user
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (!currentUser) {
+                changePasswordMessage.textContent = 'Ошибка: пользователь не найден';
+                changePasswordMessage.className = 'error-message';
+                showNotification('error', 'Ошибка: пользователь не найден');
+                return;
+            }
+        
+            // Get all users
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            
+            // Find user by email instead of ID
+            const userIndex = users.findIndex(user => user.email === currentUser.email);
+
+            if (userIndex === -1) {
+                changePasswordMessage.textContent = 'Ошибка: пользователь не найден в базе';
+                changePasswordMessage.className = 'error-message';
+                showNotification('error', 'Ошибка: пользователь не найден в базе');
+                return;
+            }
+
+            // Verify current password
+            if (currentPassword !== users[userIndex].password) {
+                changePasswordMessage.textContent = 'Неверный текущий пароль';
+                changePasswordMessage.className = 'error-message';
+                showNotification('error', 'Неверный текущий пароль');
+                return;
+            }
+
+            // Check if new passwords match
+            if (newPassword !== confirmNewPassword) {
+                changePasswordMessage.textContent = 'Новые пароли не совпадают';
+                changePasswordMessage.className = 'error-message';
+                showNotification('error', 'Новые пароли не совпадают');
+                return;
+            }
+
+            // Update password in users array
+            users[userIndex].password = newPassword;
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // Update current user
+            currentUser.password = newPassword;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+
+            changePasswordMessage.textContent = 'Пароль успешно изменен';
+            changePasswordMessage.className = 'success-message';
+            showNotification('success', 'Пароль успешно изменен');
+            
+            // Hide modal after success
+            setTimeout(hideChangePasswordModal, 1500);
+        });
+    }
+        // Add click handlers for change password option
+        document.querySelectorAll('.submenu-item').forEach(item => {
+            if (item.textContent.trim() === 'Изменить пароль') {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    showChangePasswordModal();
+                });
+            }
+        });
+
+        // Close change password modal when clicking outside
+if (changePasswordModal) {
+    changePasswordModal.addEventListener('click', (e) => {
+        if (e.target === changePasswordModal) {
+            hideChangePasswordModal();
+        }
+    });
+}
+
+        // Loading Screen
+        window.addEventListener('load', () => {
+            const loadingScreen = document.getElementById('loading-screen');
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        });
+
+        // Add animation classes to elements
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.game-card');
+            cards.forEach((card, index) => {
+                card.classList.add('fade-in');
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.classList.add('slide-in');
+            });
+        });
+        
+        // Password policy check for registration
+        function validatePasswordPolicy(password) {
+        const minLength = /.{8,}/;
+        const lower = /[a-zа-яё]/;
+        const digit = /[0-9]/;
+        return minLength.test(password) && lower.test(password) && digit.test(password);
+    }
+
+        // Forgot password link logic
+        const forgotPasswordLink = document.getElementById('forgot-password-link');
+        const resetPasswordModal = document.getElementById('reset-password-modal');
+        const resetPasswordForm = document.getElementById('reset-password-form');
+        const setNewPasswordForm = document.getElementById('set-new-password-form');
+        const resetPasswordMessage = document.getElementById('reset-password-message');
+        let resetUserEmail = null;
+
+        if (forgotPasswordLink) {
+            forgotPasswordLink.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (resetPasswordModal) {
+                    resetPasswordModal.classList.add('active');
+                    resetPasswordForm.style.display = 'block';
+                    setNewPasswordForm.style.display = 'none';
+                    resetPasswordMessage.textContent = '';
+                    resetPasswordForm.reset();
+                    setNewPasswordForm.reset();
+                }
+            });
+        }
+
+        // Закрытие по клику вне окна
+        if (resetPasswordModal) {
+            resetPasswordModal.addEventListener('click', function(e) {
+                if (e.target === resetPasswordModal) {
+                    resetPasswordModal.classList.remove('active');
+                }
+            });
+        }
+
+        // Поиск email
+        if (resetPasswordForm) {
+            resetPasswordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('reset-email').value.trim();
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.email === email);
+                if (!user) {
+                    resetPasswordMessage.textContent = 'Пользователь с таким email не найден.';
+                    resetPasswordMessage.className = 'error-message';
+                    return;
+                }
+                resetUserEmail = email;
+                resetPasswordMessage.textContent = 'Email найден. Введите новый пароль.';
+                resetPasswordMessage.className = 'success-message';
+                resetPasswordForm.style.display = 'none';
+                setNewPasswordForm.style.display = 'block';
+            });
+        }
+
+        // Смена пароля
+        if (setNewPasswordForm) {
+            setNewPasswordForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const newPassword = document.getElementById('reset-new-password').value;
+                const confirmPassword = document.getElementById('reset-confirm-password').value;
+                if (newPassword !== confirmPassword) {
+                    resetPasswordMessage.textContent = 'Пароли не совпадают.';
+                    resetPasswordMessage.className = 'error-message';
+                    return;
+                }
+                if (!validatePasswordPolicy(newPassword)) {
+                    resetPasswordMessage.textContent = 'Пароль не соответствует требованиям безопасности.';
+                    resetPasswordMessage.className = 'error-message';
+                    return;
+                }
+                // Обновляем пароль в localStorage
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const userIndex = users.findIndex(u => u.email === resetUserEmail);
+                if (userIndex === -1) {
+                    resetPasswordMessage.textContent = 'Ошибка: пользователь не найден.';
+                    resetPasswordMessage.className = 'error-message';
+                    return;
+                }
+                users[userIndex].password = newPassword;
+                localStorage.setItem('users', JSON.stringify(users));
+                resetPasswordMessage.textContent = 'Пароль успешно изменён! Теперь вы можете войти.';
+                resetPasswordMessage.className = 'success-message';
+                setTimeout(() => {
+                    resetPasswordModal.classList.remove('active');
+                }, 2000);
+            });
+        }
+
+        // Password visibility toggle
+        const togglePasswordVisibility = document.getElementById('toggle-password-visibility');
+        const registerPassword = document.getElementById('register-password');
+        const registerPasswordConfirm = document.getElementById('register-password-confirm');
+
+        if (togglePasswordVisibility && registerPassword && registerPasswordConfirm) {
+            togglePasswordVisibility.addEventListener('click', function() {
+                const type = registerPassword.type === 'password' ? 'text' : 'password';
+                registerPassword.type = type;
+                registerPasswordConfirm.type = type;
+                this.textContent = type === 'password' ? 'Показать пароль' : 'Скрыть пароль';
+            });
+        }
+
+        // Password policy validation
+        const policyLength = document.getElementById('policy-length');
+        const policyLower = document.getElementById('policy-lower');
+        const policyDigit = document.getElementById('policy-digit');
+        function updatePasswordPolicy(password) {
+            if (policyLength) policyLength.className = password.length >= 8 ? 'text-green-400' : 'text-gray-400';
+            if (policyLower) policyLower.className = /[a-zа-яё]/.test(password) ? 'text-green-400' : 'text-gray-400';
+            if (policyDigit) policyDigit.className = /[0-9]/.test(password) ? 'text-green-400' : 'text-gray-400';     
+        }
+
+        if (registerPassword) {
+            registerPassword.addEventListener('input', function() {
+                updatePasswordPolicy(this.value);
+            });
+        }
+
+        // Delete account functionality
+        const deleteAccountBtn = document.getElementById('delete-account-btn');
+        const deleteAccountBtnMobile = document.getElementById('delete-account-btn-mobile');
+        const deleteAccountModal = document.getElementById('delete-account-modal');
+        const confirmDeleteAccount = document.getElementById('confirm-delete-account');
+        const cancelDeleteAccount = document.getElementById('cancel-delete-account');
+        const deleteAccountMessage = document.getElementById('delete-account-message');
+
+        function showDeleteAccountModal() {
+            deleteAccountModal.classList.add('active');
+            deleteAccountMessage.textContent = '';
+        }
+
+        function hideDeleteAccountModal() {
+            deleteAccountModal.classList.remove('active');
+        }
+
+        if (deleteAccountBtn) {
+            deleteAccountBtn.addEventListener('click', () => {
+                showDeleteAccountModal();
+           });
+        }
+
+if (deleteAccountBtnMobile) {
+    deleteAccountBtnMobile.addEventListener('click', () => {
+        showDeleteAccountModal();
+    });
+}
+
+// Подтверждение удаления аккаунта
+if (confirmDeleteAccount) {
+    confirmDeleteAccount.addEventListener('click', () => {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser) {
+            deleteAccountMessage.textContent = 'Ошибка: пользователь не найден';
+            deleteAccountMessage.className = 'error-message';
+            return;
+        }
+
+        // Get all users
+        const users = JSON.parse(localStorage.getItem('users') || '[]');
+        const userIndex = users.findIndex(user => user.email === currentUser.email);
+
+        if (userIndex === -1) {
+            deleteAccountMessage.textContent = 'Ошибка: пользователь не найден в базе';
+            deleteAccountMessage.className = 'error-message';
+            return;
+        }
+
+        // Remove user from users array
+        users.splice(userIndex, 1);
+        localStorage.setItem('users', JSON.stringify(users));
+
+        // Remove current user
+        localStorage.removeItem('currentUser');
+
+        deleteAccountMessage.textContent = 'Аккаунт успешно удален';
+        deleteAccountMessage.className = 'success-message';
+
+        setTimeout(() => {
+            hideDeleteAccountModal();
+            location.reload();
+        }, 1500);
+    });
+}
+        if (cancelDeleteAccount) {
+            cancelDeleteAccount.addEventListener('click', hideDeleteAccountModal);
+        }
+
+        if (deleteAccountModal) {
+            deleteAccountModal.addEventListener('click', function(e) {
+                if (e.target === deleteAccountModal) {
+                    hideDeleteAccountModal();
+                }
+            });
+        }
+
+        // Update auth UI function
+        function updateAuthUI() {
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                updateUIForLoggedInUser(currentUser.email);
+            }
+        }
+        // Mobile Modal Functionality
+        const mobileGameHubModal = document.getElementById('mobile-gamehub-modal');
+        const mobileSubscribeModal = document.getElementById('mobile-subscribe-modal');
+        const closeMobileGameHubModal = document.getElementById('close-mobile-gamehub-modal');
+        const closeMobileModals = document.querySelectorAll('.close-mobile-modal');
+
+        // Close mobile modals
+        if (closeMobileGameHubModal) {
+            closeMobileGameHubModal.addEventListener('click', function() {
+                mobileGameHubModal.classList.add('hidden');
+            });
+        }
+
+        closeMobileModals.forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                const modal = this.closest('.fixed');
+                if (modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+
+        // Close modals when clicking outside
+        if (mobileGameHubModal) {
+            mobileGameHubModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        }
+
+        if (mobileSubscribeModal) {
+            mobileSubscribeModal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
+            });
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateAuthUI();
+        });
+    </script>
+</body>
+</html>
