@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GameHub - лучший портал для онлайн и оффлайн игр. Найди свою игру среди тысяч игр в нашей коллекции.">
+    <meta name="keywords" content="игры, онлайн игры, PC игры, консольные игры, игровой портал">
+    <meta name="author" content="GameHub Team">
+    <meta name="language" content="ru">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#1e293b">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gamehub.com/">
+    <meta property="og:title" content="GameHub - Мир игр">
+    <meta property="og:description" content="Лучший портал для онлайн и оффлайн игр. Найди свою игру среди тысяч игр в нашей коллекции.">
+    <meta property="og:image" content="https://gamehub.com/images/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gamehub.com/">
+    <meta property="twitter:title" content="GameHub - Мир игр">
+    <meta property="twitter:description" content="Лучший портал для онлайн и оффлайн игр. Найди свою игру среди тысяч игр в нашей коллекции.">
+    <meta property="twitter:image" content="https://gamehub.com/images/twitter-image.jpg">
+    
+    <title>GameHub - Мир игр</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="manifest" href="site.webmanifest">
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://cdn.tailwindcss.com" as="script" crossorigin>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style" crossorigin>
+    
+    <!-- Tailwind CSS (CDN - для разработки, для продакшена используйте PostCSS) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles/variables.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/modals.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-purple-900 via-indigo-900 via-blue-900 to-slate-900 text-white min-h-screen">
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-blue-600 text-white px-4 py-2 rounded z-50">
+        Перейти к основному содержимому
+    </a>
+
+    <!-- Header -->
+    <header class="bg-black/20 backdrop-blur-xl sticky top-0 z-50 border-b border-white/10 shadow-2xl">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" role="navigation" aria-label="Главная навигация">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center flex-shrink-0">
+                    <a href="#" class="text-3xl font-bold text-white hover:text-blue-400 transition-colors duration-300" aria-label="GameHub - Главная страница">
+                        <i class="fas fa-gamepad text-blue-500 mr-3 text-4xl" aria-hidden="true"></i>
+                        <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">GameHub</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                    <div class="flex space-x-8" role="menubar">
+                        <button type="button" class="text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/10 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm" role="menuitem" aria-current="page">
+                            <i class="fas fa-home mr-2" aria-hidden="true"></i>Главная
+                        </button>
+                        <button type="button" class="text-gray-300 hover:text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/10 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm" role="menuitem">
+                            <i class="fas fa-gamepad mr-2" aria-hidden="true"></i>Все игры
+                        </button>
+                        <button type="button" class="text-gray-300 hover:text-white px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/10 transition-all duration-300 transform hover:scale-105 backdrop-blur-sm" role="menuitem">
+                            <i class="fas fa-newspaper mr-2" aria-hidden="true"></i>Новости
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- User Actions -->
+                <div class="hidden md:block ml-4">
+                    <div class="ml-4 flex items-center md:ml-6 space-x-3">
+                        <button type="button" class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center" id="desktop-register-btn" aria-label="Регистрация">
+                            <i class="fas fa-user-plus mr-2" aria-hidden="true"></i> Регистрация
+                        </button>
+                        <button type="button" class="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center" id="desktop-login-btn" aria-label="Вход в систему">
+                            <i class="fas fa-sign-in-alt mr-2" aria-hidden="true"></i> Вход
+                        </button>
+                        <button type="button" class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-6 py-3 rounded-xl text-sm font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center hidden" id="admin-btn" aria-label="Панель администратора">
+                            <i class="fas fa-cog mr-2" aria-hidden="true"></i> Админ
+                        </button>
+                        
+                        <!-- User Menu -->
+                        <div class="burger-menu ml-4" role="menu" aria-label="Меню пользователя">
+                            <button type="button" class="burger-menu-button" aria-label="Открыть меню пользователя" aria-expanded="false" aria-haspopup="true">
+                                <i class="fas fa-bars" aria-hidden="true"></i>
+                            </button>
+                            <div class="burger-menu-overlay"></div>
+                            <div class="burger-menu-content" role="menu" aria-label="Опции пользователя">
+                                <div class="burger-menu-item" id="profile-option" role="menuitem" tabindex="0">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                    Профиль
+                                </div>
+                                <div class="burger-menu-item" id="friends-option" role="menuitem" tabindex="0">
+                                    <i class="fas fa-users" aria-hidden="true"></i>
+                                    Друзья
+                                </div>
+                                <div class="burger-menu-divider"></div>
+                                <div class="burger-menu-item" id="account-option" role="menuitem" tabindex="0" aria-haspopup="true">
+                                    <i class="fas fa-user-shield" aria-hidden="true"></i>
+                                    Аккаунт
+                                </div>
+                                <div class="submenu" id="account-submenu" role="menu" aria-label="Опции аккаунта">
+                                    <div class="submenu-item" role="menuitem" tabindex="0">
+                                        <i class="fas fa-key" aria-hidden="true"></i>
+                                        Изменить пароль
+                                    </div>
+                                    <div class="submenu-item text-red-400" id="desktop-delete-account-btn" role="menuitem" tabindex="0">
+                                        <i class="fas fa-user-times" aria-hidden="true"></i>
+                                        Удалить аккаунт
+                                    </div>
+                                    <div class="submenu-item text-red-400" id="desktop-logout-btn" role="menuitem" tabindex="0">
+                                        <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                        Выйти
+                                    </div>
+                                </div>
+                                <div class="burger-menu-divider"></div>
+                                <div class="burger-menu-item" id="about-option" role="menuitem" tabindex="0">
+                                    <i class="fas fa-info-circle" aria-hidden="true"></i>
+                                    О проекте
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <div class="-mr-2 flex md:hidden">
+                    <button type="button" id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none" aria-label="Открыть мобильное меню" aria-expanded="false" aria-controls="mobile-menu">
+                        <i class="fas fa-bars" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Mobile Navigation -->
+        <div class="hidden md:hidden" id="mobile-menu" role="menu" aria-label="Мобильное меню">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <button type="button" class="text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" role="menuitem" aria-current="page">Главная</button>
+                <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" role="menuitem">Топ игр</button>
+                <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" role="menuitem">Новости</button>
+                <div class="mobile-profile-options hidden">
+                    <div class="border-t border-gray-700 mt-2 pt-2">
+                        <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" id="mobile-profile-option" role="menuitem">
+                            <i class="fas fa-user mr-2" aria-hidden="true"></i> Профиль
+                        </button>
+                        <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" id="mobile-friends-option" role="menuitem">
+                            <i class="fas fa-users mr-2" aria-hidden="true"></i> Друзья
+                        </button>
+                        <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" id="mobile-account-option" role="menuitem">
+                            <i class="fas fa-user-shield mr-2" aria-hidden="true"></i> Аккаунт
+                        </button>
+                        <div class="mobile-submenu" id="mobile-account-submenu" role="menu" aria-label="Мобильные опции аккаунта">
+                            <button type="button" class="mobile-submenu-item w-full text-left" role="menuitem">
+                                <i class="fas fa-key" aria-hidden="true"></i>
+                                Изменить пароль
+                            </button>
+                            <button type="button" class="mobile-submenu-item text-red-400 w-full text-left" id="delete-account-btn-mobile" role="menuitem">
+                                <i class="fas fa-user-times" aria-hidden="true"></i>
+                                Удалить аккаунт
+                            </button>
+                            <button type="button" class="mobile-submenu-item text-red-400 w-full text-left" id="mobile-logout-btn" role="menuitem">
+                                <i class="fas fa-sign-out-alt" aria-hidden="true"></i>
+                                Выйти
+                            </button>
+                        </div>
+                        <div class="border-t border-gray-700 mt-2 pt-2">
+                            <button type="button" class="text-gray-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium hover:bg-gray-800 w-full text-left" id="mobile-about-option" role="menuitem">
+                                <i class="fas fa-info-circle mr-2" aria-hidden="true"></i> О проекте
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-4 pb-3 border-t border-gray-700">
+                <div class="flex items-center px-5 space-x-3">
+                    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium w-full" id="mobile-register-btn" aria-label="Регистрация">
+                        Регистрация
+                    </button>
+                    <button type="button" class="bg-gray-800 hover:bg-gray-700 text-white px-4 py-2 rounded-md text-sm font-medium w-full" id="mobile-login-btn" aria-label="Вход в систему">
+                        Вход
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="flex-1">
+        <!-- Hero Section -->
+        <section class="relative w-full py-24" aria-labelledby="hero-title">
+            <div class="relative z-10 max-w-6xl mx-auto text-center px-4">
+                
+                <!-- Search Section -->
+                <section class="relative max-w-2xl mx-auto" aria-labelledby="search-title">
+                    <h2 id="search-title" class="sr-only">Поиск игр</h2>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="game-search" 
+                            placeholder="Поиск игр..." 
+                            class="w-full px-6 py-4 text-lg bg-white/90 text-gray-900 rounded-xl pl-12 pr-20 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:bg-white shadow-lg transition-all duration-300"
+                            aria-label="Поиск игр"
+                        >
+                        <i class="fas fa-search absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500 text-lg" aria-hidden="true"></i>
+                        <button 
+                            id="search-btn" 
+                            class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-all duration-300 font-medium shadow-md hover:shadow-lg"
+                            aria-label="Найти игры"
+                        >
+                            Найти
+                        </button>
+                    </div>
+                    
+                    <!-- Search Filters -->
+                    <div class="flex flex-wrap justify-center gap-3 mt-6" role="group" aria-label="Фильтры поиска">
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="all" aria-pressed="true">
+                            <i class="fas fa-gamepad mr-2" aria-hidden="true"></i>Все игры
+                        </button>
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="action" aria-pressed="false">
+                            <i class="fas fa-fire mr-2" aria-hidden="true"></i>Экшен
+                        </button>
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="rpg" aria-pressed="false">
+                            <i class="fas fa-dragon mr-2" aria-hidden="true"></i>RPG
+                        </button>
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="strategy" aria-pressed="false">
+                            <i class="fas fa-chess mr-2" aria-hidden="true"></i>Стратегия
+                        </button>
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="sports" aria-pressed="false">
+                            <i class="fas fa-futbol mr-2" aria-hidden="true"></i>Спорт
+                        </button>
+                        <button class="search-filter bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-300 backdrop-blur-sm border border-white/20 hover:border-white/40" data-filter="adventure" aria-pressed="false">
+                            <i class="fas fa-map mr-2" aria-hidden="true"></i>Приключения
+                        </button>
+                    </div>
+                </section>
+                
+                <!-- Search Results -->
+                <section id="search-results" class="mt-12 hidden" aria-labelledby="search-results-title" role="region">
+                    <h2 id="search-results-title" class="sr-only">Результаты поиска</h2>
+                    <div class="bg-white/95 backdrop-blur-sm rounded-2xl p-8 shadow-2xl border border-white/20">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-gray-900 flex items-center">
+                                <i class="fas fa-list mr-3 text-blue-600" aria-hidden="true"></i>
+                                Результаты поиска
+                            </h3>
+                            <button id="clear-search" class="text-gray-500 hover:text-gray-700 transition-all duration-300 transform hover:scale-105" aria-label="Очистить результаты поиска">
+                                <i class="fas fa-times mr-2" aria-hidden="true"></i> Очистить
+                            </button>
+                        </div>
+                        <div id="search-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" role="list" aria-label="Список найденных игр">
+                            <!-- Search results will be populated here -->
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+        
+        <!-- Games Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" aria-labelledby="games-section-title">
+            <div class="text-center mb-16">
+                <h2 id="games-section-title" class="text-4xl md:text-5xl font-bold text-white mb-6 flex items-center justify-center">
+                    <i class="fas fa-desktop text-blue-500 mr-4 text-5xl" aria-hidden="true"></i> 
+                    <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Рекомендации</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Откройте для себя лучшие игры, подобранные специально для вас
+                </p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="games-container" role="list" aria-label="Список рекомендуемых игр">
+                <!-- Games will be loaded dynamically -->
+            </div>
+        </section>
+        
+        <!-- News Section -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20" aria-labelledby="news-section-title">
+            <div class="text-center mb-16">
+                <h2 id="news-section-title" class="text-4xl md:text-5xl font-bold text-white mb-6 flex items-center justify-center">
+                    <i class="fas fa-newspaper text-blue-500 mr-4 text-5xl" aria-hidden="true"></i> 
+                    <span class="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Новости</span>
+                </h2>
+                <p class="text-xl text-gray-300 max-w-2xl mx-auto">
+                    Будьте в курсе последних событий игровой индустрии
+                </p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="news-container" role="list" aria-label="Список новостей">
+                <!-- News will be loaded dynamically -->
+            </div>
+            
+            <div class="text-center mt-16">
+                <button class="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-8 py-4 rounded-xl font-medium transition-all duration-300 border border-gray-600 hover:border-gray-500 transform hover:scale-105 shadow-lg hover:shadow-xl" aria-label="Показать все новости">
+                    <i class="fas fa-arrow-right mr-3" aria-hidden="true"></i>Все новости
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-transparent border-t border-gray-800 mt-20" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-white text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-gamepad text-blue-500 mr-2" aria-hidden="true"></i> GameHub
+                    </h3>
+                    <p class="text-gray-400 text-sm">
+                        Лучший портал для онлайн и оффлайн игр. Присоединяйтесь к нашему сообществу!
+                    </p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="https://www.instagram.com/bazooka_official" class="text-gray-400 hover:text-white transition" aria-label="Instagram">
+                            <i class="fab fa-instagram" aria-hidden="true"></i>
+                        </a>
+                        <a href="https://discord.gg/tyCKVa3a" class="text-gray-400 hover:text-white transition" aria-label="Discord">
+                            <i class="fab fa-discord" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-4">Техподдержка</h4>
+                    <p class="text-gray-400 text-sm mb-4">
+                        Если у вас возникли вопросы, пожалуйста свяжитесь с нами
+                    </p>
+                    <div class="space-y-3">
+                        <div class="flex">
+                            <input type="email" id="support-email" placeholder="Ваш email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Email для техподдержки">
+                            <button id="submit-support-ticket" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition" aria-label="Отправить запрос в техподдержку">
+                                <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <input type="text" id="support-subject" placeholder="Тема проблемы" class="bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-sm" aria-label="Тема проблемы">
+                        <textarea id="support-message" placeholder="Опишите вашу проблему..." class="bg-gray-800 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full text-sm h-20 resize-none" aria-label="Описание проблемы"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm">
+                    © 2025 GameHub. Все права защищены.
+                </p>
+                <nav class="flex space-x-6 mt-4 md:mt-0" role="navigation" aria-label="Дополнительная навигация">
+                    <a href="#" class="text-gray-400 hover:text-white transition text-sm">Правила</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition text-sm">Конфиденциальность</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition text-sm">Cookies</a>
+                </nav>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modal -->
+    <div id="forgot-password-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="forgot-password-modal-title">
+        <div class="auth-content relative">
+            <h2 id="forgot-password-modal-title" class="text-2xl font-bold text-white mb-4 text-center">Сброс пароля</h2>
+            <button type="button" class="absolute top-3 right-3 text-gray-400 hover:text-gray-200 transition" id="close-password-reset-modal" aria-label="Закрыть">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div id="forgot-password-message" role="alert" aria-live="polite"></div>
+            
+            <!-- Step 1: Email verification -->
+            <form id="forgot-password-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="forgot-password-email" class="form-label">Email</label>
+                    <input type="email" id="forgot-password-email" placeholder="Введите ваш email" required aria-label="Email для сброса пароля">
+                </div>
+                <button type="submit">Проверить email</button>
+            </form>
+            
+            <!-- Step 2: New password -->
+            <form id="new-password-form" class="auth-form" style="display: none;">
+                <div class="form-group">
+                    <label for="new-password-input" class="form-label">Новый пароль</label>
+                    <div class="relative-input">
+                        <input type="password" id="new-password-input" placeholder="Введите новый пароль" required aria-label="Новый пароль">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm-new-password-input" class="form-label">Подтвердите новый пароль</label>
+                    <div class="relative-input">
+                        <input type="password" id="confirm-new-password-input" placeholder="Подтвердите новый пароль" required aria-label="Подтверждение нового пароля">
+                    </div>
+                </div>
+                <button type="button" id="toggle-new-password-visibility" class="w-full mb-2 py-2 rounded bg-gray-700 text-white hover:bg-gray-600 transition text-sm">Показать пароль</button>
+                <ul id="new-password-policy" class="text-xs mb-2 pl-4 list-disc" role="list" aria-label="Требования к паролю">
+                    <li id="new-policy-length" class="text-gray-400">Минимум 8 символов</li>
+                    <li id="new-policy-lower" class="text-gray-400">Хотя бы одна строчная буква</li>
+                    <li id="new-policy-digit" class="text-gray-400">Хотя бы одна цифра</li>
+                </ul>
+                <button type="submit">Изменить пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="auth-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title" aria-describedby="auth-modal-description">
+        <div class="auth-content">
+            <div class="auth-tabs" role="tablist">
+                <div id="show-login" class="auth-tab active" role="tab" aria-selected="true" aria-controls="login-form">Вход</div>
+                <div id="show-register" class="auth-tab" role="tab" aria-selected="false" aria-controls="register-form">Регистрация</div>
+            </div>
+            <div id="auth-message" role="alert" aria-live="polite"></div>
+            <form id="login-form" class="auth-form active" role="tabpanel" aria-labelledby="show-login">
+                <div class="form-group">
+                    <label for="login-email" class="form-label">Email</label>
+                    <input type="email" id="login-email" placeholder="Введите ваш email" required aria-label="Email для входа">
+                </div>
+                <div class="form-group">
+                    <label for="login-password" class="form-label">Пароль</label>
+                    <input type="password" id="login-password" placeholder="Введите ваш пароль" required aria-label="Пароль для входа">
+                </div>
+                <button type="submit">Войти</button>
+                <div class="text-right mt-2">
+                    <button type="button" id="forgot-password-link" class="text-blue-400 hover:text-blue-600 text-xs bg-transparent border-none">Забыли пароль?</button>
+                </div>
+            </form>
+            <form id="register-form" class="auth-form" role="tabpanel" aria-labelledby="show-register" aria-hidden="true">
+                <div class="form-group">
+                    <label for="register-email" class="form-label">Email</label>
+                    <input type="email" id="register-email" placeholder="Введите ваш email" required aria-label="Email для регистрации">
+                </div>
+                <div class="form-group">
+                    <label for="register-password" class="form-label">Пароль</label>
+                    <div class="relative-input">
+                        <input type="password" id="register-password" placeholder="Создайте пароль" required aria-label="Пароль для регистрации">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="register-password-confirm" class="form-label">Подтверждение пароля</label>
+                    <div class="relative-input">
+                        <input type="password" id="register-password-confirm" placeholder="Подтвердите пароль" required aria-label="Подтверждение пароля для регистрации">
+                    </div>
+                </div>
+                <button type="button" id="toggle-password-visibility" class="w-full mb-2 py-2 rounded bg-gray-700 text-white hover:bg-gray-600 transition text-sm">Показать пароль</button>
+                <ul id="password-policy" class="text-xs mb-2 pl-4 list-disc" role="list" aria-label="Требования к паролю">
+                    <li id="policy-length" class="text-gray-400">Минимум 8 символов</li>
+                    <li id="policy-lower" class="text-gray-400">Хотя бы одна строчная буква</li>
+                    <li id="policy-digit" class="text-gray-400">Хотя бы одна цифра</li>
+                </ul>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="profile-modal" role="dialog" aria-modal="true" aria-labelledby="profile-modal-title">
+        <div class="profile-content">
+            <button type="button" class="profile-close absolute top-3 right-3 text-gray-400 hover:text-gray-200 transition" aria-label="Закрыть">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="profile-header">
+                <div class="profile-avatar" id="profile-avatar" role="button" tabindex="0" aria-label="Изменить аватар">
+                    <img id="avatar-preview" src="https://via.placeholder.com/150" alt="Аватар пользователя">
+                    <div class="profile-avatar-overlay">
+                        <i class="fas fa-camera text-white text-2xl" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="profile-id" id="profile-id">ID: Loading...</div>
+            </div>
+            <form id="profile-form" class="profile-form">
+                <input type="text" id="username" name="username" placeholder="Имя пользователя" required aria-label="Имя пользователя">
+                <button type="submit">Сохранить изменения</button>
+            </form>
+            <!-- Скрытый input для загрузки аватарки -->
+            <input type="file" id="avatar-input" accept="image/*" style="display: none;" aria-label="Выбрать аватарку">
+            <div id="profile-message" class="profile-message" role="alert" aria-live="polite"></div>
+        </div>
+    </div>
+
+    <!-- Friends Modal -->
+    <div id="friends-modal" class="friends-modal" role="dialog" aria-modal="true" aria-labelledby="friends-modal-title">
+        <div class="friends-content">
+            <button type="button" class="friends-close absolute top-3 right-3 text-gray-400 hover:text-gray-200 transition" aria-label="Закрыть">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            <div class="friends-header">
+                <div class="friends-title" id="friends-modal-title">Друзья</div>
+                <button class="add-friend-button" id="add-friend-button" aria-label="Добавить друга">
+                    <i class="fas fa-user-plus" aria-hidden="true"></i>
+                    Добавить друга
+                </button>
+            </div>
+            <!-- Friend Requests Section -->
+            <div class="friend-requests-section hidden" id="friend-requests-section">
+                <div class="friend-requests-title">
+                    <i class="fas fa-user-clock" aria-hidden="true"></i>
+                    Запросы в друзья
+                </div>
+                <div id="friend-requests-list">
+                    <!-- Friend requests will be added here dynamically -->
+                </div>
+            </div>
+            <div class="friends-list" id="friends-list" role="list" aria-label="Список друзей">
+                <!-- Friends will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Friend Modal -->
+    <div id="add-friend-modal" class="friends-modal" role="dialog" aria-modal="true" aria-labelledby="add-friend-modal-title">
+        <div class="friends-content">
+            <div class="friends-header">
+                <div class="friends-title" id="add-friend-modal-title">Добавить друга</div>
+            </div>
+            <div class="search-container">
+                <input type="text" class="search-input" id="friend-id-input" placeholder="Введите ID пользователя" aria-label="ID пользователя для поиска">
+                <button class="search-button" id="search-friend-button" aria-label="Найти пользователя">
+                    <i class="fas fa-search mr-2" aria-hidden="true"></i>
+                    Найти пользователя
+                </button>
+            </div>
+            <div id="search-result-container" role="region" aria-label="Результаты поиска пользователя">
+                <!-- Search results will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Password Modal -->
+    <div id="change-password-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="change-password-modal-title">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4" id="change-password-modal-title">Изменить пароль</h2>
+            <div id="change-password-message" role="alert" aria-live="polite"></div>
+            <form id="change-password-form" class="auth-form active">
+                <input type="password" id="current-password" placeholder="Текущий пароль" required aria-label="Текущий пароль">
+                <input type="password" id="new-password" placeholder="Новый пароль" required aria-label="Новый пароль">
+                <input type="password" id="confirm-new-password" placeholder="Подтвердите новый пароль" required aria-label="Подтверждение нового пароля">
+                <button type="submit">Изменить пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Loading Screen -->
+    <div class="loading" id="loading-screen" role="status" aria-label="Загрузка">
+        <div class="loading-spinner" aria-hidden="true"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="fixed bottom-20 right-6 z-[9999] flex flex-col gap-3 items-end" role="status" aria-live="polite" aria-label="Уведомления"></div>
+    
+    <!-- Notification History Button -->
+    <button id="notification-history-btn" class="hidden fixed bottom-6 right-6 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-14 h-14 flex items-center justify-center shadow-lg z-[9999] text-2xl transition" title="Уведомления" aria-label="История уведомлений">
+        <i class="fas fa-bell" aria-hidden="true"></i>
+    </button>
+    
+    <!-- Notification History Modal -->
+    <div id="notification-history-modal" class="hidden fixed bottom-24 right-6 bg-gray-900 bg-opacity-95 rounded-xl shadow-2xl w-80 max-h-[60vh] flex flex-col z-[9999] border border-blue-700" role="dialog" aria-modal="true" aria-labelledby="notification-history-title">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-blue-700">
+            <span class="font-bold text-white text-lg flex items-center gap-2" id="notification-history-title"><i class="fas fa-bell" aria-hidden="true"></i> Уведомления</span>
+            <button id="clear-notifications" class="text-blue-400 hover:text-red-400 transition text-sm" aria-label="Очистить все уведомления">Очистить</button>
+        </div>
+        <div id="notification-history-list" class="flex-1 overflow-y-auto p-4 space-y-3" role="list" aria-label="История уведомлений"></div>
+    </div>
+
+    <!-- GameHub Info Modal (только для мобильного) -->
+    <div id="mobile-gamehub-modal" class="fixed inset-0 z-[9999] bg-black bg-opacity-80 flex items-center justify-center hidden md:hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-gamehub-title">
+        <div class="bg-gray-900 rounded-xl p-6 w-[95vw] max-w-md overflow-y-auto max-h-[90vh] relative">
+            <button id="close-mobile-gamehub-modal" class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl" aria-label="Закрыть">&times;</button>
+            <div>
+                <h3 class="text-white text-lg font-bold mb-4 flex items-center" id="mobile-gamehub-title">
+                    <i class="fas fa-gamepad text-blue-500 mr-2" aria-hidden="true"></i> GameHub
+                </h3>
+                <p class="text-gray-400 text-sm mb-6">
+                    Лучший портал для онлайн и оффлайн игр. Присоединяйтесь к нашему сообществу!
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div id="mobile-subscribe-modal" class="fixed inset-0 z-[9999] bg-black bg-opacity-80 flex items-center justify-center hidden md:hidden" role="dialog" aria-modal="true" aria-labelledby="mobile-subscribe-title">
+        <div class="bg-gray-900 rounded-xl p-6 w-[95vw] max-w-md overflow-y-auto max-h-[90vh] relative">
+            <button class="absolute top-3 right-3 text-gray-400 hover:text-white text-2xl close-mobile-modal" aria-label="Закрыть">&times;</button>
+            <h4 class="text-white font-medium mb-4" id="mobile-subscribe-title">Техподдержка</h4>
+            <p class="text-gray-400 text-sm mb-4">Если у вас возникли вопросы, пожалуйста свяжитесь с нами</p>
+            <div class="flex">
+                <input type="email" placeholder="Ваш email" class="bg-gray-800 text-white px-4 py-2 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-full" aria-label="Email для техподдержки">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-r-lg transition" aria-label="Отправить">
+                    <i class="fas fa-paper-plane" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Password Reset Modal -->
+    <div id="reset-password-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="reset-password-modal-title">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4" id="reset-password-modal-title">Восстановить учетную запись</h2>
+            <div id="reset-password-message" role="alert" aria-live="polite"></div>
+            <form id="reset-password-form" class="auth-form active">
+                <input type="email" id="reset-email" placeholder="Email" required aria-label="Email для восстановления">
+                <button type="submit">Найти аккаунт</button>
+            </form>
+            <form id="set-new-password-form" class="auth-form" style="display:none">
+                <input type="password" id="reset-new-password" placeholder="Новый пароль" required aria-label="Новый пароль">
+                <input type="password" id="reset-confirm-password" placeholder="Подтвердите новый пароль" required aria-label="Подтверждение нового пароля">
+                <button type="submit">Сменить пароль</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="delete-account-modal-title">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4" id="delete-account-modal-title">Удалить аккаунт</h2>
+            <p class="text-gray-300 mb-4">Вы уверены, что хотите удалить свой аккаунт? Это действие необратимо.</p>
+            <div id="delete-account-message" class="mb-2" role="alert" aria-live="polite"></div>
+            <div class="flex gap-4">
+                <button id="confirm-delete-account" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">Удалить</button>
+                <button id="cancel-delete-account" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="about-modal-title">
+        <div class="auth-content">
+            <h2 class="text-xl font-bold text-white mb-4" id="about-modal-title">О проекте</h2>
+            <div class="space-y-4 text-gray-300">
+                <div class="text-center">
+                    <i class="fas fa-gamepad text-blue-500 text-4xl mb-4" aria-hidden="true"></i>
+                    <h3 class="text-white font-medium text-lg">GameHub</h3>
+                    <p class="text-sm">Версия 1.0.0</p>
+                </div>
+                <div>
+                    <p>GameHub - это современный веб-портал для поиска и каталогизации игр. Мы стремимся создать лучшее место для геймеров, где они могут найти новые игры, общаться с друзьями и быть в курсе последних новостей игровой индустрии.</p>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-2">Технологии:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-sm">
+                        <li>HTML5, CSS3, JavaScript ES6+</li>
+                        <li>Tailwind CSS для стилизации</li>
+                        <li>Модульная архитектура</li>
+                        <li>Адаптивный дизайн</li>
+                        <li>WCAG 2.1 доступность</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-medium mb-2">Ссылки:</h4>
+                    <div class="flex space-x-4">
+                        <a href="https://discord.gg/tyCKVa3a" class="text-blue-400 hover:text-blue-300 flex items-center">
+                            <i class="fab fa-discord mr-2" aria-hidden="true"></i> Discord
+                        </a>
+                        <a href="https://www.instagram.com/bazooka_official" class="text-blue-400 hover:text-blue-300 flex items-center">
+                            <i class="fab fa-instagram mr-2" aria-hidden="true"></i> Instagram
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6">
+                <button id="close-about" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded">Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Modules -->
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
