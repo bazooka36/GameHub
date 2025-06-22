@@ -1,0 +1,11 @@
+[
+    { "id": "1", "title": "Cyberpunk 2077", "genre": "RPG", "rating": 4.5, "image": "https://cdn.akamai.steamstatic.com/steam/apps/1091500/header.jpg?t=1723545627", "description": "Action RPG in a dystopian open world." },
+    { "id": "2", "title": "The Witcher 3: Wild Hunt", "genre": "RPG", "rating": 4.9, "image": "https://cdn.akamai.steamstatic.com/steam/apps/292030/header.jpg?t=1704207297", "description": "Story-driven open world RPG." },
+    { "id": "3", "title": "Red Dead Redemption 2", "genre": "Action", "rating": 4.8, "image": "https://cdn.akamai.steamstatic.com/steam/apps/1174180/header.jpg?t=1671485009", "description": "Epic tale of life in America's unforgiving heartland." },
+    { "id": "4", "title": "Grand Theft Auto V", "genre": "Action", "rating": 4.7, "image": "https://cdn.akamai.steamstatic.com/steam/apps/271590/header.jpg?t=1719508215", "description": "The biggest, most dynamic and most diverse open world ever created." },
+    { "id": "5", "title": "Counter-Strike 2", "genre": "Shooter", "rating": 4.6, "image": "https://cdn.akamai.steamstatic.com/steam/apps/730/header.jpg?t=1721235198", "description": "The next chapter in the world's #1 first-person shooter." },
+    { "id": "6", "title": "Squad", "genre": "Shooter", "rating": 4.4, "image": "https://cdn.akamai.steamstatic.com/steam/apps/393380/header.jpg?t=1698422329", "description": "A tactical FPS that provides authentic combat experiences." },
+    { "id": "7", "title": "Detroit: Become Human", "genre": "Adventure", "rating": 4.8, "image": "https://cdn.akamai.steamstatic.com/steam/apps/1222140/header.jpg?t=1680021350", "description": "Experience the intertwined fates of three androids." },
+    { "id": "8", "title": "Call of Duty: Black Ops III", "genre": "Shooter", "rating": 4.2, "image": "https://cdn.akamai.steamstatic.com/steam/apps/311210/header.jpg?t=1692983792", "description": "A dark, gritty future where a new breed of Black Ops soldier emerges." },
+    { "id": "9", "title": "Arma 3", "genre": "Simulation", "rating": 4.5, "image": "https://cdn.akamai.steamstatic.com/steam/apps/107410/header.jpg", "description": "Experience true combat gameplay in a massive military sandbox." }
+] 
