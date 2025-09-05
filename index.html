@@ -1,0 +1,2048 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Рик и Морти Вселенная - Межгалактическое Приключение</title>
+    <meta name="description" content="Отправляйся в межгалактическое приключение с самым безумным дедом во вселенной! Интерактивный сайт о Рике и Морти.">
+    <!-- Tailwind CSS CDN - For development only. In production, install as PostCSS plugin -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:wght@700&display=swap');
+        
+        :root {
+            --neon-green: #00ff00;
+            --neon-purple: #9900ff;
+            --neon-pink: #ff00ff;
+            --neon-blue: #00ffff;
+            --neon-yellow: #ffff00;
+            --dark-bg: #0a0a1f;
+            --portal-glow: 0 0 20px currentColor, 0 0 40px currentColor, 0 0 60px currentColor;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        .comic-font {
+            font-family: 'Bangers', cursive;
+            letter-spacing: 1px;
+        }
+        
+        .neon-text {
+            text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px currentColor, 0 0 20px currentColor, 0 0 25px currentColor;
+        }
+        
+        .neon-border {
+            box-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px currentColor, 0 0 20px currentColor;
+            border: 2px solid currentColor;
+            transition: all 0.3s ease;
+        }
+        
+        .neon-border:hover {
+            box-shadow: var(--portal-glow);
+            transform: scale(1.02);
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .portal-animation {
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        
+        .portal-animation:hover {
+            transform: scale(1.1);
+            box-shadow: var(--portal-glow);
+        }
+        
+
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        
+        @keyframes burp {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .flying-saucer {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            background: radial-gradient(ellipse at center, #aaa 0%, #666 100%);
+            border-radius: 50%;
+            animation: fly 20s linear infinite;
+            box-shadow: 0 0 10px var(--neon-blue);
+            filter: drop-shadow(0 0 5px var(--neon-blue));
+        }
+        
+        @keyframes fly {
+            0% { transform: translateX(-100px) translateY(100px); }
+            100% { transform: translateX(calc(100vw + 100px)) translateY(calc(100vh - 100px)); }
+        }
+        
+        .portal-bg {
+            background: radial-gradient(circle, currentColor 0%, transparent 70%);
+            animation: pulse 2s infinite alternate;
+            position: relative;
+        }
+        
+        .portal-bg::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: innerPulse 1.5s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.1); }
+        }
+        
+        @keyframes innerPulse {
+            0% { opacity: 0.1; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.2); }
+        }
+        
+
+        
+
+        
+        /* Enhanced Card Styles */
+        .character-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.6) 100%);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 280px;
+        }
+        
+        .character-card:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: var(--portal-glow);
+        }
+        
+        .character-image-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+        
+        .character-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex-grow: 1;
+            justify-content: space-between;
+        }
+        
+        .character-name {
+            margin-bottom: 0.5rem;
+        }
+        
+        .character-description {
+            margin-bottom: 1rem;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        /* Enhanced image loading and display */
+        .character-card img {
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            transition: all 0.3s ease;
+            filter: brightness(1.1) contrast(1.1);
+            background: linear-gradient(45deg, #333, #666);
+            min-height: 100%;
+            min-width: 100%;
+        }
+        
+        .character-card img:hover {
+            filter: brightness(1.2) contrast(1.2) saturate(1.1);
+            transform: scale(1.05);
+        }
+        
+        /* Loading state for images */
+        .character-card img[src=""] {
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+            position: relative;
+        }
+        
+        .character-card img[src=""]::after {
+            content: "?";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        
+        /* Ensure proper image scaling */
+        @media (max-width: 768px) {
+            .character-card img {
+                image-rendering: auto;
+                -webkit-backface-visibility: hidden;
+                backface-visibility: hidden;
+                -webkit-transform: translateZ(0);
+                transform: translateZ(0);
+            }
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid var(--neon-green);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
+            z-index: 1000;
+            transition: width 0.1s ease;
+        }
+        
+        /* Enhanced Navigation */
+        .nav-link {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: currentColor;
+            transition: left 0.3s ease;
+        }
+        
+        .nav-link:hover::before {
+            left: 0;
+        }
+        
+        /* Enhanced Modal Centering */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+        }
+        
+        .modal-content {
+            background: rgba(17, 24, 39, 0.95);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            width: 100%;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (min-width: 640px) {
+            .modal-content {
+                max-width: 28rem;
+                padding: 2rem;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .modal-content {
+                max-width: 32rem;
+                padding: 2rem;
+            }
+        }
+        
+        /* Mobile Optimizations */
+        @media (max-width: 768px) {
+            .comic-font {
+                font-size: 0.9em;
+            }
+            
+            .rick-character {
+                width: 60px;
+                height: 90px;
+                bottom: 10px;
+                right: 10px;
+            }
+            
+            .flying-saucer {
+                display: none;
+            }
+            
+            .portal-animation:hover {
+                transform: scale(1.05);
+            }
+            
+            /* Mobile-specific improvements */
+            .character-card {
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+            
+            .character-card img {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .portal-animation {
+                transform: scale(0.8);
+            }
+            
+            /* Improve touch targets */
+            button, a {
+                min-height: 48px;
+                min-width: 48px;
+                padding: 0.75rem 1rem;
+            }
+            
+            /* Better modal positioning */
+            .fixed.inset-0 {
+                padding: 0.5rem;
+            }
+            
+            /* Improve text readability */
+            .neon-text {
+                text-shadow: 0 0 10px currentColor;
+            }
+            
+            /* Mobile menu improvements */
+            #mobileMenu {
+                background: linear-gradient(135deg, rgba(0,0,0,0.98), rgba(20,20,40,0.95));
+                backdrop-filter: blur(10px);
+            }
+            
+            #mobileMenu a {
+                transition: all 0.3s ease;
+                border-radius: 8px;
+                padding: 1rem;
+                font-size: 1.25rem;
+            }
+            
+            #mobileMenu a:hover {
+                background: rgba(255,255,255,0.1);
+                transform: scale(1.05);
+            }
+            
+            /* Mobile navigation */
+            nav {
+                padding: 0.75rem 1rem;
+            }
+            
+            nav .comic-font {
+                font-size: 1.5rem;
+            }
+            
+            /* Mobile hero section */
+            #hero h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.2;
+                margin-bottom: 1rem;
+            }
+            
+            #hero p {
+                font-size: 1rem !important;
+                margin-bottom: 1.5rem;
+            }
+            
+            #hero button {
+                font-size: 1rem !important;
+                padding: 0.75rem 1.5rem;
+            }
+            
+            /* Mobile character cards */
+            .character-card {
+                min-height: 200px;
+                padding: 1rem;
+            }
+            
+            .character-card img {
+                width: 80px !important;
+                height: 80px !important;
+            }
+            
+            .character-image-container {
+                margin-bottom: 0.75rem;
+            }
+            
+            .character-image-container > div {
+                width: 80px !important;
+                height: 80px !important;
+            }
+            
+            .character-card h3 {
+                font-size: 1rem !important;
+                margin-bottom: 0.5rem;
+                line-height: 1.2;
+            }
+            
+            .character-card p {
+                font-size: 0.75rem !important;
+                line-height: 1.3;
+                margin-bottom: 0.75rem;
+            }
+            
+            .character-card button {
+                font-size: 0.75rem !important;
+                padding: 0.5rem 0.75rem !important;
+            }
+            
+            /* Mobile sections */
+            section {
+                padding: 2rem 1rem;
+            }
+            
+            section h2 {
+                font-size: 2rem !important;
+                margin-bottom: 1.5rem;
+            }
+            
+            /* Mobile grid improvements */
+            .grid {
+                gap: 1rem;
+            }
+            
+            /* Mobile timeline */
+            .timeline-item {
+                margin-bottom: 2rem;
+            }
+            
+            /* Mobile quote generator */
+            #quote-text {
+                font-size: 1.125rem !important;
+                line-height: 1.4;
+            }
+            
+            #quote-context {
+                font-size: 0.875rem !important;
+            }
+        }
+        
+        /* Extra small devices */
+        @media (max-width: 480px) {
+            .comic-font {
+                font-size: 0.8em;
+            }
+            
+            .character-card {
+                min-height: 180px;
+                padding: 0.75rem;
+            }
+            
+            .character-card img {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            
+            .character-image-container > div {
+                width: 70px !important;
+                height: 70px !important;
+            }
+            
+            .character-image-container {
+                margin-bottom: 0.5rem;
+            }
+            
+            .character-card h3 {
+                font-size: 0.875rem !important;
+                margin-bottom: 0.25rem;
+                line-height: 1.1;
+            }
+            
+            .character-card p {
+                font-size: 0.7rem !important;
+                line-height: 1.2;
+                margin-bottom: 0.5rem;
+            }
+            
+            .character-card button {
+                font-size: 0.7rem !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+            
+            #hero h1 {
+                font-size: 2rem !important;
+            }
+            
+            section h2 {
+                font-size: 1.75rem !important;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                margin: 0.5rem;
+            }
+            
+            button, a {
+                min-height: 44px;
+                min-width: 44px;
+                padding: 0.5rem 0.75rem;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* Prevent zoom on input focus (iOS) */
+        @media screen and (-webkit-min-device-pixel-ratio: 0) {
+            select,
+            textarea,
+            input {
+                font-size: 16px;
+            }
+        }
+        
+        /* Additional Mobile Optimizations */
+        @media (max-width: 640px) {
+            /* Ultra-small devices */
+            .character-card {
+                padding: 0.75rem;
+                min-height: 190px;
+            }
+            
+            .character-card img {
+                width: 75px !important;
+                height: 75px !important;
+            }
+            
+            .character-image-container > div {
+                width: 75px !important;
+                height: 75px !important;
+            }
+            
+            .character-card h3 {
+                font-size: 0.9rem !important;
+                margin-bottom: 0.4rem;
+            }
+            
+            .character-card p {
+                font-size: 0.7rem !important;
+                margin-bottom: 0.6rem;
+            }
+            
+            .character-card button {
+                font-size: 0.7rem !important;
+                padding: 0.4rem 0.6rem !important;
+            }
+            
+            #hero h1 {
+                font-size: 2rem !important;
+                line-height: 1.1;
+            }
+            
+            section h2 {
+                font-size: 1.5rem !important;
+            }
+            
+            .modal-content {
+                margin: 0.25rem;
+                padding: 0.75rem;
+            }
+            
+            /* Improve touch targets for very small screens */
+            button, a {
+                min-height: 48px;
+                min-width: 48px;
+                padding: 0.75rem;
+            }
+        }
+        
+        /* Landscape mobile optimization */
+        @media (max-height: 500px) and (orientation: landscape) {
+            #hero {
+                min-height: 100vh;
+                padding: 1rem 0;
+            }
+            
+            #hero h1 {
+                font-size: 2rem !important;
+                margin-bottom: 0.5rem;
+            }
+            
+            #hero p {
+                font-size: 0.875rem !important;
+                margin-bottom: 1rem;
+            }
+            
+            section {
+                padding: 1rem 0.5rem;
+            }
+        }
+        
+        /* High DPI displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .neon-text {
+                text-shadow: 0 0 8px currentColor, 0 0 16px currentColor, 0 0 24px currentColor;
+            }
+            
+            .neon-border {
+                box-shadow: 0 0 8px currentColor, 0 0 16px currentColor, 0 0 24px currentColor;
+            }
+            
+            .character-card img {
+                image-rendering: -webkit-optimize-contrast;
+                image-rendering: crisp-edges;
+                filter: brightness(1.15) contrast(1.15) saturate(1.05);
+            }
+        }
+        
+        /* Ultra high DPI displays (Retina 4K+) */
+        @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 288dpi) {
+            .character-card img {
+                image-rendering: auto;
+                filter: brightness(1.2) contrast(1.2) saturate(1.1);
+            }
+        }
+        
+        /* Performance Optimizations */
+        .will-change {
+            will-change: transform, opacity;
+        }
+        
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Enhanced Button Styles */
+        .btn-primary {
+            background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+            border: none;
+            color: white;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,255,0,0.4);
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 3s ease-out forwards;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes slideInDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes slideOutUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100%); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative overflow-x-hidden">
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="fixed inset-0 bg-dark-bg flex items-center justify-center z-50">
+        <div class="text-center">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="comic-font text-2xl neon-text" style="color: var(--neon-green);">ЗАГРУЗКА ПОРТАЛА...</p>
+        </div>
+    </div>
+
+    <!-- Animated 3D Background -->
+    <div id="bg-scene" class="fixed top-0 left-0 w-full h-full z-0"></div>
+    <div class="parallax-layer" style="transform: translateZ(0);">
+        <div class="flying-saucer" style="top: 20%; animation-delay: 0s;"></div>
+        <div class="flying-saucer" style="top: 60%; animation-delay: 7s; animation-duration: 15s;"></div>
+        <div class="flying-saucer" style="top: 40%; animation-delay: 12s; animation-duration: 18s;"></div>
+    </div>
+
+    <!-- Enhanced Navigation -->
+    <nav class="relative z-10 py-4 px-6 flex justify-between items-center bg-black bg-opacity-20 backdrop-blur-sm">
+        <div class="comic-font text-3xl neon-text" style="color: var(--neon-green);">РИК & МОРТИ</div>
+        <div class="hidden md:flex space-x-6">
+            <a href="#hero" class="nav-link neon-text text-lg px-3 py-1 rounded-lg hover:neon-border" style="color: var(--neon-pink);">ГЛАВНАЯ</a>
+            <a href="#characters" class="nav-link neon-text text-lg px-3 py-1 rounded-lg hover:neon-border" style="color: var(--neon-purple);">ПЕРСОНАЖИ</a>
+            <a href="#episodes" class="nav-link neon-text text-lg px-3 py-1 rounded-lg hover:neon-border" style="color: var(--neon-blue);">ЭПИЗОДЫ</a>
+            <a href="#gallery" class="nav-link neon-text text-lg px-3 py-1 rounded-lg hover:neon-border" style="color: var(--neon-green);">ГАЛЕРЕЯ</a>
+        </div>
+        <button class="md:hidden text-white hover:text-gray-300 transition-colors" id="mobileMenuBtn">
+            <i data-feather="menu"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="fixed inset-0 bg-black bg-opacity-95 z-40 hidden backdrop-blur-sm">
+        <div class="flex flex-col items-center justify-center h-full space-y-6 p-6">
+            <button id="closeMobileMenu" class="absolute top-4 right-4 text-white text-3xl p-3 rounded-full hover:bg-gray-700 transition-colors">&times;</button>
+            <a href="#hero" class="comic-font text-lg sm:text-xl neon-text block w-full max-w-xs text-center py-4 px-6 rounded-lg transition-all duration-300 hover:scale-105" style="color: var(--neon-pink);">ГЛАВНАЯ</a>
+            <a href="#characters" class="comic-font text-lg sm:text-xl neon-text block w-full max-w-xs text-center py-4 px-6 rounded-lg transition-all duration-300 hover:scale-105" style="color: var(--neon-purple);">ПЕРСОНАЖИ</a>
+            <a href="#episodes" class="comic-font text-lg sm:text-xl neon-text block w-full max-w-xs text-center py-4 px-6 rounded-lg transition-all duration-300 hover:scale-105" style="color: var(--neon-blue);">ЭПИЗОДЫ</a>
+            <a href="#gallery" class="comic-font text-lg sm:text-xl neon-text block w-full max-w-xs text-center py-4 px-6 rounded-lg transition-all duration-300 hover:scale-105" style="color: var(--neon-green);">ГАЛЕРЕЯ</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="relative z-10 min-h-screen flex items-center justify-center px-4 sm:px-6">
+        <div class="text-center max-w-4xl mx-auto" data-aos="zoom-in" data-aos-duration="1500">
+            <h1 class="comic-font text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl mb-4 sm:mb-6 neon-text leading-tight" style="color: var(--neon-green);">
+                WUBBA LUBBA DUB DUB!
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl lg:text-2xl max-w-3xl mx-auto mb-6 sm:mb-8 md:mb-10 neon-text leading-relaxed px-2" style="color: var(--neon-blue);">
+                Отправляйся в межгалактическое приключение с самым безумным дедом во вселенной!
+            </p>
+            <button class="btn-primary comic-font text-base sm:text-lg md:text-xl lg:text-2xl px-6 sm:px-8 py-3 sm:py-4 rounded-full transition-all duration-500 hover:scale-105" 
+                    onclick="activatePortal()">
+                ПОРТАЛ АКТИВИРОВАН!
+            </button>
+        </div>
+    </section>
+
+    <!-- Characters Section -->
+    <section id="characters" class="relative z-10 py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+        <h2 class="comic-font text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center mb-8 sm:mb-12 md:mb-16 neon-text" style="color: var(--neon-pink);" data-aos="fade-up">ПЕРСОНАЖИ</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto">
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="100">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-green);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/1.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Рик Санчез" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-green);">РИК САНЧЕЗ</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Гениальный учёный, алкоголик, циник и дед Морти.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-green);" onclick="showCharacterInfo('rick')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="200">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-blue);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/2.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Морти Смит" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-blue);">МОРТИ СМИТ</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Внук Рика, вечно втянутый в опасные приключения.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-blue);" onclick="showCharacterInfo('morty')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="300">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-pink);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/3.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Саммер Смит" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-pink);">САММЕР СМИТ</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Сестра Морти, которая тоже участвует в приключениях.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-pink);" onclick="showCharacterInfo('summer')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="400">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-purple);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/4.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Бет Смит" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-purple);">БЕТ СМИТ</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Дочь Рика и мать Морти и Саммер, ветеринар.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-purple);" onclick="showCharacterInfo('beth')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Additional Characters Row -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 max-w-7xl mx-auto mt-8 sm:mt-12">
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="500">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-yellow);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/5.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Джерри Смит" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-yellow);">ДЖЕРРИ СМИТ</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Муж Бет и отец Морти и Саммер, часто неудачник.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-yellow);" onclick="showCharacterInfo('jerry')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="600">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-green);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/6.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Абродольф Линклер" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-green);">АБРОДОЛЬФ ЛИНКЛЕР</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Гитлер из альтернативной вселенной, теперь хороший парень.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-green);" onclick="showCharacterInfo('abradolf')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+            <div class="character-card rounded-xl p-4 sm:p-6" data-aos="flip-left" data-aos-delay="700">
+                <div class="character-image-container">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 rounded-full neon-border portal-bg" style="color: var(--neon-blue);">
+                        <img src="https://rickandmortyapi.com/api/character/avatar/7.jpeg" 
+                             class="w-full h-full rounded-full object-cover" alt="Александр" loading="lazy">
+                    </div>
+                </div>
+                <div class="character-info">
+                    <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text character-name" style="color: var(--neon-blue);">АЛЕКСАНДР</h3>
+                    <p class="text-xs sm:text-sm md:text-base leading-relaxed character-description">Один из персонажей из различных эпизодов сериала.</p>
+                    <button class="px-3 sm:px-4 py-2 sm:py-2 rounded-lg neon-border text-xs sm:text-sm transition-all duration-300 hover:scale-105" style="color: var(--neon-blue);" onclick="showCharacterInfo('alexander')">
+                        УЗНАТЬ БОЛЬШЕ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Section -->
+    <section class="relative z-10 py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="comic-font text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 sm:mb-8 md:mb-10 neon-text" style="color: var(--neon-green);" data-aos="fade-up">МЕЖГАЛАКТИЧЕСКИЙ ПОРТАЛ</h2>
+            <div class="relative inline-block">
+                <div class="w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 rounded-full neon-border portal-bg portal-animation mx-auto" style="color: var(--neon-purple);" onclick="activatePortal()"></div>
+                <p class="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg">Кликни на портал для активации!</p>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Portal Dimension Explorer -->
+    <section class="relative z-10 py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+        <h2 class="comic-font text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center mb-6 sm:mb-8 md:mb-10 neon-text" style="color: var(--neon-blue);" data-aos="fade-up">ИССЛЕДОВАТЕЛЬ ИЗМЕРЕНИЙ</h2>
+        <div class="max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8 md:mb-10">
+                <div class="dimension-card bg-gray-900 bg-opacity-50 rounded-xl p-3 sm:p-4 text-center cursor-pointer neon-border portal-animation transition-all duration-300 hover:scale-105" 
+                     style="color: var(--neon-green);" data-dimension="C-137">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full portal-bg" style="color: var(--neon-green);"></div>
+                    <h3 class="comic-font text-lg sm:text-xl mb-2">ИЗМЕРЕНИЕ C-137</h3>
+                    <p class="text-xs sm:text-sm">Родное измерение Рика</p>
+                </div>
+                <div class="dimension-card bg-gray-900 bg-opacity-50 rounded-xl p-3 sm:p-4 text-center cursor-pointer neon-border portal-animation transition-all duration-300 hover:scale-105" 
+                     style="color: var(--neon-pink);" data-dimension="Cronenberg">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full portal-bg" style="color: var(--neon-pink);"></div>
+                    <h3 class="comic-font text-lg sm:text-xl mb-2">ИЗМЕРЕНИЕ КРОНЕНБЕРГ</h3>
+                    <p class="text-xs sm:text-sm">Мир мутантов</p>
+                </div>
+                <div class="dimension-card bg-gray-900 bg-opacity-50 rounded-xl p-3 sm:p-4 text-center cursor-pointer neon-border portal-animation transition-all duration-300 hover:scale-105" 
+                     style="color: var(--neon-purple);" data-dimension="Fantasy">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-3 sm:mb-4 rounded-full portal-bg" style="color: var(--neon-purple);"></div>
+                    <h3 class="comic-font text-lg sm:text-xl mb-2">ФЭНТЕЗИ МИР</h3>
+                    <p class="text-xs sm:text-sm">Мир драконов и магии</p>
+                </div>
+            </div>
+            <div id="dimension-info" class="bg-gray-900 bg-opacity-70 rounded-xl p-4 sm:p-6 neon-border hidden" style="color: var(--neon-blue);">
+                <h3 class="comic-font text-lg sm:text-xl md:text-2xl mb-3 sm:mb-4" id="dimension-name">Название измерения</h3>
+                <p class="text-sm sm:text-base leading-relaxed" id="dimension-description">Описание измерения появится здесь</p>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Timeline Section -->
+    <section class="relative z-10 py-20 px-4">
+        <h2 class="comic-font text-4xl md:text-5xl text-center mb-16 neon-text" style="color: var(--neon-purple);" data-aos="fade-up">ХРОНОЛОГИЯ ПРИКЛЮЧЕНИЙ</h2>
+        <div class="max-w-6xl mx-auto">
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-purple-500 to-green-500"></div>
+                
+                <div class="mb-12 relative" data-aos="fade-right">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-10 md:text-right mb-4 md:mb-0">
+                            <h3 class="comic-font text-2xl neon-text mb-2" style="color: var(--neon-green);">ПИЛОТНЫЙ ЭПИЗОД</h3>
+                            <p class="text-sm">Рик заставляет Морти помочь ему в межгалактической миссии, что приводит к полному хаосу.</p>
+                        </div>
+                        <div class="md:w-16 md:h-16 mx-auto md:mx-0 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full neon-border portal-bg" style="color: var(--neon-green);"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-10 mt-4 md:mt-0">
+                            <div class="bg-gray-900 bg-opacity-50 p-4 rounded-lg neon-border" style="color: var(--neon-green);">
+                                <p class="text-xs">"Морти, нам нужно пройти через этот портал и собрать мега-семена!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 relative" data-aos="fade-left">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-10 md:text-right mb-4 md:mb-0 order-3">
+                            <div class="bg-gray-900 bg-opacity-50 p-4 rounded-lg neon-border" style="color: var(--neon-blue);">
+                                <p class="text-xs">"Я превратился в огурец, Морти! Огурец! Самое умное существо во вселенной стало маринованным огурцом!"</p>
+                            </div>
+                        </div>
+                        <div class="md:w-16 md:h-16 mx-auto md:mx-0 flex items-center justify-center order-2">
+                            <div class="w-8 h-8 rounded-full neon-border portal-bg" style="color: var(--neon-blue);"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-10 mt-4 md:mt-0 order-1 md:text-left text-right">
+                            <h3 class="comic-font text-2xl neon-text mb-2" style="color: var(--neon-blue);">PICKLE RICK</h3>
+                            <p class="text-sm">Рик превращает себя в огурец чтобы избежать семейной терапии, но попадает в опасные приключения.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 relative" data-aos="fade-right">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-10 md:text-right mb-4 md:mb-0">
+                            <h3 class="comic-font text-2xl neon-text mb-2" style="color: var(--neon-pink);">THE RICKLANTIS MIXUP</h3>
+                            <p class="text-sm">Морти и Рик посещают Цитадель Риков, где разворачивается политическая драма.</p>
+                        </div>
+                        <div class="md:w-16 md:h-16 mx-auto md:mx-0 flex items-center justify-center">
+                            <div class="w-8 h-8 rounded-full neon-border portal-bg" style="color: var(--neon-pink);"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-10 mt-4 md:mt-0">
+                            <div class="bg-gray-900 bg-opacity-50 p-4 rounded-lg neon-border" style="color: var(--neon-pink);">
+                                <p class="text-xs">"Я - хитрый Морти! Я пройду через все препятствия и стану лидером Цитадели!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-12 relative" data-aos="fade-left">
+                    <div class="md:flex items-center">
+                        <div class="md:w-1/2 md:pr-10 md:text-right mb-4 md:mb-0 order-3">
+                            <div class="bg-gray-900 bg-opacity-50 p-4 rounded-lg neon-border" style="color: var(--neon-purple);">
+                                <p class="text-xs">"Змеиный план! У них всегда есть змеиный план! Шшш-шшш!"</p>
+                            </div>
+                        </div>
+                        <div class="md:w-16 md:h-16 mx-auto md:mx-0 flex items-center justify-center order-2">
+                            <div class="w-8 h-8 rounded-full neon-border portal-bg" style="color: var(--neon-purple);"></div>
+                        </div>
+                        <div class="md:w-1/2 md:pl-10 mt-4 md:mt-0 order-1 md:text-left text-right">
+                            <h3 class="comic-font text-2xl neon-text mb-2" style="color: var(--neon-purple);">THE WHIRLY DIRLY CONSPIRACY</h3>
+                            <p class="text-sm">Рик и Джерри отправляются в курортный парк развлечений, где обнаруживают заговор.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Episode Guide Section -->
+    <section class="relative z-10 py-20 px-4">
+        <h2 class="comic-font text-4xl md:text-5xl text-center mb-16 neon-text" style="color: var(--neon-green);" data-aos="fade-up">ГИД ПО СЕЗОНАМ</h2>
+        <div class="max-w-6xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="season-card bg-gray-900 bg-opacity-50 rounded-xl p-6 text-center cursor-pointer neon-border portal-animation" 
+                     data-season="1" style="color: var(--neon-green);">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full portal-bg flex items-center justify-center" style="color: var(--neon-green);">
+                        <span class="comic-font text-4xl">1</span>
+                    </div>
+                    <h3 class="comic-font text-2xl mb-2">СЕЗОН 1</h3>
+                    <p class="text-sm mb-4">11 эпизодов</p>
+                    <div class="progress-bar bg-gray-800 rounded-full h-2 mb-2">
+                        <div class="progress-fill bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs">Завершен</p>
+                </div>
+
+                <div class="season-card bg-gray-900 bg-opacity-50 rounded-xl p-6 text-center cursor-pointer neon-border portal-animation" 
+                     data-season="2" style="color: var(--neon-blue);">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full portal-bg flex items-center justify-center" style="color: var(--neon-blue);">
+                        <span class="comic-font text-4xl">2</span>
+                    </div>
+                    <h3 class="comic-font text-2xl mb-2">СЕЗОН 2</h3>
+                    <p class="text-sm mb-4">10 эпизодов</p>
+                    <div class="progress-bar bg-gray-800 rounded-full h-2 mb-2">
+                        <div class="progress-fill bg-blue-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs">Завершен</p>
+                </div>
+
+                <div class="season-card bg-gray-900 bg-opacity-50 rounded-xl p-6 text-center cursor-pointer neon-border portal-animation" 
+                     data-season="3" style="color: var(--neon-pink);">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full portal-bg flex items-center justify-center" style="color: var(--neon-pink);">
+                        <span class="comic-font text-4xl">3</span>
+                    </div>
+                    <h3 class="comic-font text-2xl mb-2">СЕЗОН 3</h3>
+                    <p class="text-sm mb-4">10 эпизодов</p>
+                    <div class="progress-bar bg-gray-800 rounded-full h-2 mb-2">
+                        <div class="progress-fill bg-pink-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs">Завершен</p>
+                </div>
+
+                <div class="season-card bg-gray-900 bg-opacity-50 rounded-xl p-6 text-center cursor-pointer neon-border portal-animation" 
+                     data-season="4" style="color: var(--neon-purple);">
+                    <div class="w-24 h-24 mx-auto mb-4 rounded-full portal-bg flex items-center justify-center" style="color: var(--neon-purple);">
+                        <span class="comic-font text-4xl">4</span>
+                    </div>
+                    <h3 class="comic-font text-2xl mb-2">СЕЗОН 4</h3>
+                    <p class="text-sm mb-4">10 эпизодов</p>
+                    <div class="progress-bar bg-gray-800 rounded-full h-2 mb-2">
+                        <div class="progress-fill bg-purple-500 h-2 rounded-full" style="width: 100%"></div>
+                    </div>
+                    <p class="text-xs">Завершен</p>
+                </div>
+            </div>
+
+            <div id="season-details" class="bg-gray-900 bg-opacity-70 rounded-xl p-6 neon-border hidden" style="color: var(--neon-blue);">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="comic-font text-2xl" id="season-title">Сезон 1</h3>
+                    <button id="close-details" class="text-white hover:text-gray-300 transition-colors">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div id="episodes-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Episodes will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- Quote Generator -->
+    <section class="relative z-10 py-12 sm:py-16 md:py-20 px-4 sm:px-6">
+        <h2 class="comic-font text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-center mb-6 sm:mb-8 md:mb-12 lg:mb-16 neon-text" style="color: var(--neon-pink);" data-aos="fade-up">ГЕНЕРАТОР ЦИТАТ РИКА</h2>
+        <div class="max-w-4xl mx-auto">
+            <div class="bg-gray-900 bg-opacity-50 rounded-xl p-4 sm:p-6 md:p-8 neon-border text-center mb-4 sm:mb-6 md:mb-8" style="color: var(--neon-blue);">
+                <p id="quote-text" class="text-base sm:text-lg md:text-xl lg:text-2xl comic-font mb-3 sm:mb-4 md:mb-6 leading-relaxed">"Wubba lubba dub dub!"</p>
+                <p id="quote-context" class="text-xs sm:text-sm md:text-base italic">— Рик Санчез, в моменте радости</p>
+            </div>
+            <div class="text-center">
+                <button id="generate-quote" class="comic-font px-4 sm:px-6 md:px-8 py-3 sm:py-3 md:py-4 rounded-full neon-border transition-all duration-300 hover:scale-105 text-sm sm:text-base md:text-lg" 
+                        style="color: var(--neon-purple); background: rgba(153, 0, 255, 0.2);">
+                    СГЕНЕРИРОВАТЬ ЦИТАТУ!
+                </button>
+            </div>
+        </div>
+    </section>
+
+
+
+    <footer class="relative z-10 py-8 sm:py-10 px-4 sm:px-6 text-center">
+        <p class="neon-text text-sm sm:text-base" style="color: var(--neon-blue);">© 2023 Рик и Морти Вселенная. Всем приветственникам!</p>
+    </footer>
+
+    <script>
+        // Инициализация анимаций
+        AOS.init({
+            duration: 1200,
+            once: true,
+            offset: 100,
+            easing: 'ease-out-cubic'
+        });
+        feather.replace();
+        
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+        
+        // Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.pageYOffset;
+            const docHeight = document.body.offsetHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            document.getElementById('scrollProgress').style.width = scrollPercent + '%';
+        });
+        
+        // Mobile Menu with improved mobile handling
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.style.opacity = '0';
+            // Prevent body scroll when menu is open
+            document.body.style.overflow = 'hidden';
+            // Pause background animations
+            pauseBackgroundAnimations();
+            setTimeout(() => {
+                mobileMenu.style.opacity = '1';
+            }, 10);
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenu.style.opacity = '0';
+            // Re-enable body scroll
+            document.body.style.overflow = '';
+            // Resume background animations
+            resumeBackgroundAnimations();
+            setTimeout(() => {
+                mobileMenu.classList.add('hidden');
+            }, 300);
+        });
+        
+        // Close mobile menu when clicking on links
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.style.opacity = '0';
+                document.body.style.overflow = '';
+                // Resume background animations
+                resumeBackgroundAnimations();
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            });
+        });
+        
+        // Close mobile menu when clicking outside (on the background)
+        mobileMenu.addEventListener('click', (e) => {
+            if (e.target === mobileMenu) {
+                mobileMenu.style.opacity = '0';
+                document.body.style.overflow = '';
+                // Resume background animations
+                resumeBackgroundAnimations();
+                setTimeout(() => {
+                    mobileMenu.classList.add('hidden');
+                }, 300);
+            }
+        });
+        
+        // Function to pause background animations
+        function pauseBackgroundAnimations() {
+            const animatedElements = document.querySelectorAll('.portal-bg, .flying-saucer, .particle');
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'paused';
+            });
+        }
+        
+        // Function to resume background animations
+        function resumeBackgroundAnimations() {
+            const animatedElements = document.querySelectorAll('.portal-bg, .flying-saucer, .particle');
+            animatedElements.forEach(el => {
+                el.style.animationPlayState = 'running';
+            });
+        }
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Three.js Animated Background
+        function initBackground() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x0a0a1f, 0.8);
+            document.getElementById('bg-scene').appendChild(renderer.domElement);
+            
+            // Create enhanced portal effect
+            const portalGeometry = new THREE.TorusGeometry(5, 1, 16, 100);
+            const portalMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x00ff00, 
+                wireframe: true,
+                transparent: true,
+                opacity: 0.6
+            });
+            
+            const portals = [];
+            for (let i = 0; i < 20; i++) {
+                const portal = new THREE.Mesh(portalGeometry, portalMaterial);
+                portal.position.x = (Math.random() - 0.5) * 60;
+                portal.position.y = (Math.random() - 0.5) * 60;
+                portal.position.z = (Math.random() - 0.5) * 40 - 20;
+                portal.rotation.x = Math.random() * Math.PI;
+                portal.rotation.y = Math.random() * Math.PI;
+                portal.scale.set(Math.random() * 1.2 + 0.3, Math.random() * 1.2 + 0.3, Math.random() * 1.2 + 0.3);
+                scene.add(portal);
+                portals.push(portal);
+            }
+            
+            // Create floating particles with different colors
+            const particleGeometry = new THREE.BufferGeometry();
+            const particleCount = 1500;
+            const posArray = new Float32Array(particleCount * 3);
+            const colorArray = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                posArray[i] = (Math.random() - 0.5) * 120;
+                posArray[i + 1] = (Math.random() - 0.5) * 120;
+                posArray[i + 2] = (Math.random() - 0.5) * 60 - 30;
+                
+                // Random colors
+                const colors = [0x00ff00, 0x9900ff, 0xff00ff, 0x00ffff, 0xffff00];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                colorArray[i] = (color >> 16) / 255;
+                colorArray[i + 1] = ((color >> 8) & 255) / 255;
+                colorArray[i + 2] = (color & 255) / 255;
+            }
+            
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            particleGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+            
+            const particleMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+            
+            const particles = new THREE.Points(particleGeometry, particleMaterial);
+            scene.add(particles);
+            
+            // Create animated energy lines
+            const lineMaterial = new THREE.LineBasicMaterial({ 
+                color: 0x9900ff,
+                transparent: true,
+                opacity: 0.7
+            });
+            
+            const lines = [];
+            for (let i = 0; i < 30; i++) {
+                const points = [];
+                points.push(new THREE.Vector3(
+                    (Math.random() - 0.5) * 60,
+                    (Math.random() - 0.5) * 60,
+                    (Math.random() - 0.5) * 40 - 20
+                ));
+                points.push(new THREE.Vector3(
+                    (Math.random() - 0.5) * 60,
+                    (Math.random() - 0.5) * 60,
+                    (Math.random() - 0.5) * 40 - 20
+                ));
+                
+                const lineGeometry = new THREE.BufferGeometry().setFromPoints(points);
+                const line = new THREE.Line(lineGeometry, lineMaterial);
+                scene.add(line);
+                lines.push({line, points, speed: Math.random() * 0.02 + 0.01});
+            }
+            
+            camera.position.z = 5;
+            
+            // Enhanced Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate portals with different speeds
+                portals.forEach((portal, index) => {
+                    portal.rotation.x += 0.01 + (index * 0.001);
+                    portal.rotation.y += 0.02 + (index * 0.002);
+                    portal.scale.x = Math.sin(Date.now() * 0.001 + index) * 0.1 + 1;
+                    portal.scale.y = Math.sin(Date.now() * 0.001 + index) * 0.1 + 1;
+                });
+                
+                // Animate particles with wave effect
+                particles.rotation.y += 0.0005;
+                particles.rotation.x += 0.0003;
+                
+                // Animate lines with wave motion
+                lines.forEach((obj, index) => {
+                    obj.points[0].x += Math.sin(Date.now() * obj.speed + index) * 0.1;
+                    obj.points[0].y += Math.cos(Date.now() * obj.speed + index) * 0.1;
+                    obj.points[1].x += Math.sin(Date.now() * obj.speed + index + 1) * 0.1;
+                    obj.points[1].y += Math.cos(Date.now() * obj.speed + index + 1) * 0.1;
+                    obj.line.geometry.setFromPoints(obj.points);
+                });
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        initBackground();
+        
+        // Simple message function
+        function showMessage(text, duration = 3000) {
+            // Create temporary message element
+            const message = document.createElement('div');
+            message.className = 'fixed top-4 left-4 right-4 sm:left-auto sm:right-4 sm:max-w-sm bg-gray-900 text-white px-4 py-3 rounded-lg neon-border z-50 text-sm sm:text-base text-center sm:text-left shadow-lg';
+            message.style.color = 'var(--neon-green)';
+            message.textContent = text;
+            document.body.appendChild(message);
+            
+            // Add animation
+            message.style.animation = 'slideInDown 0.3s ease-out';
+            
+            setTimeout(() => {
+                message.style.animation = 'slideOutUp 0.3s ease-in';
+                setTimeout(() => {
+                    message.remove();
+                }, 300);
+            }, duration);
+        }
+        
+        // Portal Activation Function
+        function activatePortal() {
+            // Create particle effect
+            createParticleEffect();
+            
+            // Add visual feedback
+            document.querySelectorAll('.portal-bg').forEach(portal => {
+                portal.style.animation = 'pulse 0.3s infinite alternate';
+                setTimeout(() => {
+                    portal.style.animation = 'pulse 2s infinite alternate';
+                }, 2000);
+            });
+            
+            // Show portal message
+            const messages = [
+                "Портал активирован! Wubba lubba dub dub!",
+                "Телепортация в процессе...",
+                "Переход в другое измерение!",
+                "Get schwifty!",
+                "Портал готов к использованию!"
+            ];
+            
+            showMessage(messages[Math.floor(Math.random() * messages.length)]);
+            
+            // Add sound effect (would need actual audio file)
+            console.log('Portal activated!');
+        }
+        
+        // Character Info Modal
+        function showCharacterInfo(character) {
+            const characterData = {
+                rick: {
+                    name: "Рик Санчез",
+                    description: "Гениальный учёный из измерения C-137. Создатель портального устройства и самый умный человек во вселенной. Известен своим цинизмом, алкоголизмом и фразой 'Wubba lubba dub dub!'",
+                    abilities: ["Гениальный интеллект", "Портальная технология", "Изобретательность", "Цинизм"],
+                    quotes: ["Wubba lubba dub dub!", "Nobody exists on purpose.", "Get schwifty!"]
+                },
+                morty: {
+                    name: "Морти Смит",
+                    description: "14-летний внук Рика, который часто попадает в опасные ситуации из-за приключений с дедом. Несмотря на страх, он всегда помогает Рику.",
+                    abilities: ["Лояльность", "Смелость", "Эмпатия", "Адаптивность"],
+                    quotes: ["Oh geez, Rick!", "I don't know about this, Rick.", "Aw, man!"]
+                },
+                summer: {
+                    name: "Саммер Смит",
+                    description: "17-летняя сестра Морти, которая иногда присоединяется к приключениям. Более уверенная в себе, чем Морти.",
+                    abilities: ["Уверенность", "Социальные навыки", "Логика", "Храбрость"],
+                    quotes: ["I'm not a baby!", "This is so cool!", "Let's do this!"]
+                },
+                beth: {
+                    name: "Бет Смит",
+                    description: "Дочь Рика и мать Морти и Саммер. Работает ветеринаром в местной больнице для животных. Умная и независимая женщина.",
+                    abilities: ["Ветеринарные навыки", "Интеллект", "Независимость", "Забота о семье"],
+                    quotes: ["I'm a horse surgeon!", "I'm not a baby!", "I can handle this!"]
+                },
+                jerry: {
+                    name: "Джерри Смит",
+                    description: "Муж Бет и отец Морти и Саммер. Часто неудачник, но добросердечный человек. Не очень умный, но любит свою семью.",
+                    abilities: ["Любовь к семье", "Оптимизм", "Настойчивость", "Доброта"],
+                    quotes: ["I'm not a failure!", "I can do this!", "I love my family!"]
+                },
+                abradolf: {
+                    name: "Абродольф Линклер",
+                    description: "Гитлер из альтернативной вселенной, который стал хорошим парнем. Работает в магазине и ведет мирную жизнь.",
+                    abilities: ["Продажи", "Доброта", "Раскаяние", "Миролюбие"],
+                    quotes: ["I'm not that guy anymore!", "I just want to help!", "Peace and love!"]
+                },
+                alexander: {
+                    name: "Александр",
+                    description: "Один из персонажей из различных эпизодов сериала. Появляется в разных измерениях и ситуациях.",
+                    abilities: ["Адаптивность", "Выживание", "Разнообразие", "Таинственность"],
+                    quotes: ["Who am I?", "What dimension is this?", "I'm confused!"]
+                }
+            };
+            
+            const data = characterData[character];
+            const modal = document.createElement('div');
+            modal.className = 'modal-container';
+            modal.innerHTML = `
+                <div class="modal-content neon-border" style="color: var(--neon-green);">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="comic-font text-lg sm:text-xl md:text-2xl neon-text">${data.name}</h3>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="text-white hover:text-gray-300 text-xl md:text-2xl p-2 rounded-full hover:bg-gray-700 transition-colors">&times;</button>
+                    </div>
+                    <p class="mb-4 text-sm sm:text-base leading-relaxed">${data.description}</p>
+                    <div class="mb-4">
+                        <h4 class="comic-font text-sm sm:text-base md:text-lg mb-2 neon-text">Способности:</h4>
+                        <ul class="text-xs sm:text-sm space-y-1">
+                            ${data.abilities.map(ability => `<li class="flex items-center"><span class="text-green-400 mr-2">•</span>${ability}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="comic-font text-sm sm:text-base md:text-lg mb-2 neon-text">Цитаты:</h4>
+                        <ul class="text-xs sm:text-sm space-y-2 italic">
+                            ${data.quotes.map(quote => `<li class="bg-gray-800 bg-opacity-50 p-2 rounded-lg">"${quote}"</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Close modal on outside click
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                }
+            });
+            
+            // Add escape key support
+            const handleEscape = (e) => {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.body.style.overflow = '';
+                    document.removeEventListener('keydown', handleEscape);
+                }
+            };
+            document.addEventListener('keydown', handleEscape);
+            
+            // Prevent body scroll when modal is open
+            document.body.style.overflow = 'hidden';
+            
+            // Add animation
+            modal.style.opacity = '0';
+            modal.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                modal.style.transition = 'all 0.3s ease-out';
+                modal.style.opacity = '1';
+                modal.style.transform = 'scale(1)';
+            }, 10);
+        }
+        
+        // Particle Effect Function
+        function createParticleEffect() {
+            const particles = 20;
+            for (let i = 0; i < particles; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * window.innerWidth + 'px';
+                    particle.style.top = Math.random() * window.innerHeight + 'px';
+                    particle.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    document.body.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 3000);
+                }, i * 50);
+            }
+        }
+        
+        // Remove old Rick character code - was deleted by user request
+        
+
+        
+
+        
+        // Dimension Explorer
+        const dimensionCards = document.querySelectorAll('.dimension-card');
+        const dimensionInfo = document.getElementById('dimension-info');
+        const dimensionName = document.getElementById('dimension-name');
+        const dimensionDescription = document.getElementById('dimension-description');
+        
+        const dimensionData = {
+            "C-137": {
+                name: "ИЗМЕРЕНИЕ C-137",
+                description: "Родное измерение Рика Санчеза. Здесь начались все приключения с Морти. Мир, где Рик построил свой гараж и портальное устройство."
+            },
+            "Cronenberg": {
+                name: "ИЗМЕРЕНИЕ КРОНЕНБЕРГ",
+                description: "Мир, превращенный в кошмар мутантов после неудачного эксперимента Рика. Население стало ужасными созданиями, напоминающими работы Дэвида Кроненберга."
+            },
+            "Fantasy": {
+                name: "ФЭНТЕЗИ МИР",
+                description: "Измерение, где технологии заменены магией, а вместо ученых - волшебники. Здесь обитают драконы, эльфы и другие мифические существа."
+            }
+        };
+        
+        dimensionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const dimension = card.getAttribute('data-dimension');
+                dimensionName.textContent = dimensionData[dimension].name;
+                dimensionDescription.textContent = dimensionData[dimension].description;
+                dimensionInfo.classList.remove('hidden');
+                
+                // Add visual feedback
+                dimensionCards.forEach(c => c.style.opacity = '0.6');
+                card.style.opacity = '1';
+            });
+        });
+        
+
+        
+        // Season Guide
+        const seasonCards = document.querySelectorAll('.season-card');
+        const seasonDetails = document.getElementById('season-details');
+        const seasonTitle = document.getElementById('season-title');
+        const episodesList = document.getElementById('episodes-list');
+        const closeDetails = document.getElementById('close-details');
+        
+        const seasonData = {
+            "1": {
+                title: "СЕЗОН 1",
+                episodes: [
+                    { number: 1, title: "Пилот", description: "Рик заставляет Морти помочь ему в межгалактической миссии." },
+                    { number: 2, title: "Газовый пёс Лэон", description: "Рик создаёт устройство, которое делает собаку Снаффлса умнее." },
+                    { number: 3, title: "Анатомический парк", description: "Рик и Морти посещают парк развлечений внутри бездомного человека." },
+                    { number: 4, title: "М. Найт Шьямал-инопланетяне!", description: "Рик, Морти и семья оказываются в ловушке с инопланетянами." },
+                    { number: 5, title: "Мисикс и разрушение", description: "Рик и Морти встречают диктатора, который хочет уничтожить Землю." },
+                    { number: 6, title: "Напиток Рика №9", description: "Рик создаёт напиток, который делает всех на вечеринке влюблёнными в Морти." },
+                    { number: 7, title: "Воспитание Газорпазорпа", description: "Рик и Морти отправляются на планету, чтобы избавиться от Газорпазорпа." },
+                    { number: 8, title: "Телевизионщики Рика", description: "Рик и Морти попадают внутрь телевизора." },
+                    { number: 9, title: "Что-то Рicked Это пошло", description: "Рик и Морти попадают в альтернативную реальность." },
+                    { number: 10, title: "Близкие контакты Рика", description: "Рик и Морти сталкиваются с инопланетным правительством." },
+                    { number: 11, title: "Рикванство времени", description: "Рик и Морти путешествуют во времени." }
+                ]
+            },
+            "2": {
+                title: "СЕЗОН 2",
+                episodes: [
+                    { number: 1, title: "Кроненберг-мир", description: "Рик и Морти возвращаются в мир, который они испортили." },
+                    { number: 2, title: "Побег из Рикзависимости", description: "Рик создаёт мини-вселенную для питания своей машины." },
+                    { number: 3, title: "Автоэротика assimilation", description: "Рик встречает Юнити, коллективный разум." },
+                    { number: 4, title: "Total Rickall", description: "Паразиты внедряют ложные воспоминания в семью." },
+                    { number: 5, title: "Get Schwifty", description: "Голова гиганта приземляется на Землю и требует музыки." },
+                    { number: 6, title: "The Ricks Must Be Crazy", description: "Рик и Морти попадают в мини-вселенную." },
+                    { number: 7, title: "Big Trouble in Little Sanchez", description: "Рик переносит свой разум в тело ребёнка." },
+                    { number: 8, title: "Interdimensional Cable 2", description: "Рик и Морти смотрят межпространственное телевидение." },
+                    { number: 9, title: "Look Who's Purging Now", description: "Рик и Морти попадают на планету с ночью очищения." },
+                    { number: 10, title: "The Wedding Squanchers", description: "Рик и семья посещают свадьбу Птичьей личности." }
+                ]
+            },
+            "3": {
+                title: "СЕЗОН 3",
+                episodes: [
+                    { number: 1, title: "Rickshank Rickdemption", description: "Рик сбегает из тюрьмы Галактической Федерации." },
+                    { number: 2, title: "Rickmancing the Stone", description: "Рик, Морти и Саммер попадают в постапокалиптический мир." },
+                    { number: 3, title: "Pickle Rick", description: "Рик превращается в огурец чтобы избежать терапии." },
+                    { number: 4, title: "Vindicators 3", description: "Рик и Морти присоединяются к команде супергероев." },
+                    { number: 5, title: "The Whirly Dirly Conspiracy", description: "Рик и Джерри отправляются в курортный парк." },
+                    { number: 6, title: "Rest and Ricklaxation", description: "Рик и Морти посещают спа-курорт." },
+                    { number: 7, title: "The Ricklantis Mixup", description: "Морти и Рик посещают Цитадель Риков." },
+                    { number: 8, title: "Morty's Mind Blowers", description: "Рик показывает Морти воспоминания, которые он стёр." },
+                    { number: 9, title: "The ABC's of Beth", description: "Рик и Бет отправляются в детский мир, который Рик создал для Бет." },
+                    { number: 10, title: "The Rickchurian Mortydate", description: "Рик и президент США вступают в конфликт." }
+                ]
+            },
+            "4": {
+                title: "СЕЗОН 4",
+                episodes: [
+                    { number: 1, title: "Edge of Tomorty: Rick Die Rickpeat", description: "Морти находит кристалл, который показывает возможные смерти." },
+                    { number: 2, title: "The Old Man and the Seat", description: "Рик охраняет свой личный туалет в космосе." },
+                    { number: 3, title: "One Crew Over the Crewcoo's Morty", description: "Рик и Морти участвуют в ограблении." },
+                    { number: 4, title: "Claw and Hoarder: Special Ricktim's Morty", description: "Морти получает дракона в обмен на душу." },
+                    { number: 5, title: "Rattlestar Ricklactica", description: "Рик и Морти создают парадокс с змеями в космосе." },
+                    { number: 6, title: "Never Ricking Morty", description: "Рик и Морти попадают в поезд-рассказчик." },
+                    { number: 7, title: "Promortyus", description: "Рик и Морти сражаются с лица-захватчиками." },
+                    { number: 8, title: "The Vat of Acid Episode", description: "Рик создаёт устройство сохранения и загрузки." },
+                    { number: 9, title: "Childrick of Mort", description: "Бет узнаёт, что у неё есть дети от других существ." },
+                    { number: 10, title: "Star Mort Rickturn of the Jerri", description: "Космическая Бет возвращается на Землю." }
+                ]
+            }
+        };
+        
+        seasonCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const season = card.getAttribute('data-season');
+                seasonTitle.textContent = seasonData[season].title;
+                
+                // Clear previous episodes
+                episodesList.innerHTML = '';
+                
+                // Add episodes
+                seasonData[season].episodes.forEach(ep => {
+                    const episodeEl = document.createElement('div');
+                    episodeEl.className = 'bg-gray-800 bg-opacity-50 p-4 rounded-lg';
+                    episodeEl.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="comic-font text-lg neon-text" style="color: var(--neon-green);">Эпизод ${ep.number}</span>
+                            <span class="text-sm text-gray-400">${ep.title}</span>
+                        </div>
+                        <p class="text-xs">${ep.description}</p>
+                    `;
+                    episodesList.appendChild(episodeEl);
+                });
+                
+                seasonDetails.classList.remove('hidden');
+            });
+        });
+        
+        closeDetails.addEventListener('click', () => {
+            seasonDetails.classList.add('hidden');
+        });
+        
+
+        
+        // Quote Generator - Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateQuoteBtn = document.getElementById('generate-quote');
+            const quoteText = document.getElementById('quote-text');
+            const quoteContext = document.getElementById('quote-context');
+            
+            console.log('DOM loaded, looking for quote elements...');
+            console.log('generateQuoteBtn:', generateQuoteBtn);
+            console.log('quoteText:', quoteText);
+            console.log('quoteContext:', quoteContext);
+            
+            // Test button functionality
+            if (generateQuoteBtn) {
+                generateQuoteBtn.addEventListener('mouseenter', () => {
+                    console.log('Button hover detected!');
+                });
+                
+                generateQuoteBtn.addEventListener('mousedown', () => {
+                    console.log('Button pressed!');
+                });
+            }
+        
+        const quotes = [
+            {
+                text: "Wubba lubba dub dub!",
+                context: "— Рик Санчез, в моменте радости"
+            },
+            {
+                text: "Nobody exists on purpose. Nobody belongs anywhere. We're all going to die.",
+                context: "— Рик Санчез, о смысле жизни"
+            },
+            {
+                text: "Get Schwifty!",
+                context: "— Рик Санчез, призывая танцевать"
+            },
+            {
+                text: "I'm Pickle Riiick!",
+                context: "— Рик Санчез, будучи огурцом"
+            },
+            {
+                text: "To live is to risk it all.",
+                context: "— Рик Санчез, о рисках жизни"
+            },
+            {
+                text: "You're in for a treat, Morty!",
+                context: "— Рик Санчез, перед опасным приключением"
+            },
+            {
+                text: "Science is sometimes more art than science.",
+                context: "— Рик Санчез, о науке"
+            },
+            {
+                text: "It's a figure of speech, Morty!",
+                context: "— Рик Санчез, объясняя идиому"
+            },
+            {
+                text: "Your failures are your own, old man!",
+                context: "— Рик Санчез, в споре с другим Риком"
+            },
+            {
+                text: "I don't give a *burp* damn!",
+                context: "— Рик Санчез, выражая безразличие"
+            },
+            {
+                text: "Grass tastes bad.",
+                context: "— Рик Санчез, о вкусе травы"
+            },
+            {
+                text: "And that's the way the news goes!",
+                context: "— Рик Санчез, о новостях"
+            },
+            {
+                text: "Hit the sack, Jack!",
+                context: "— Рик Санчез, говоря о сне"
+            },
+            {
+                text: "Rubber baby buggy bumpers!",
+                context: "— Рик Санчез, в момент восторга"
+            },
+            {
+                text: "Lick lick lick my balls!",
+                context: "— Рик Санчез, в нецензурном настроении"
+            },
+            {
+                text: "Uh ohhhh! Somersault jump!",
+                context: "— Рик Санчез, в момент опасности"
+            },
+            {
+                text: "Existence is pain!",
+                context: "— Рик Санчез, о существовании"
+            },
+            {
+                text: "You're in trouble. A lot of trouble.",
+                context: "— Рик Санчез, предупреждая об опасности"
+            },
+            {
+                text: "I'm the smartest man in the universe!",
+                context: "— Рик Санчез, о своем интеллекте"
+            },
+            {
+                text: "Morty, I'm a scientist!",
+                context: "— Рик Санчез, объясняя свою профессию"
+            }
+        ];
+        
+        let currentQuoteIndex = 0;
+        
+        generateQuoteBtn.addEventListener('click', () => {
+            console.log('Button clicked!'); // Debug log
+            
+            // Get random quote that's different from current
+            let newIndex;
+            do {
+                newIndex = Math.floor(Math.random() * quotes.length);
+            } while (newIndex === currentQuoteIndex && quotes.length > 1);
+            
+            currentQuoteIndex = newIndex;
+            const randomQuote = quotes[currentQuoteIndex];
+            
+            console.log('Selected quote:', randomQuote); // Debug log
+            
+            // Add fade out effect
+            quoteText.style.opacity = '0';
+            quoteContext.style.opacity = '0';
+            
+            setTimeout(() => {
+                // Update content
+                quoteText.textContent = `"${randomQuote.text}"`;
+                quoteContext.textContent = randomQuote.context;
+                
+                // Add fade in effect
+                quoteText.style.opacity = '1';
+                quoteContext.style.opacity = '1';
+                
+                // Add animation
+                quoteText.style.animation = 'pulse 0.5s';
+                setTimeout(() => {
+                    quoteText.style.animation = '';
+                }, 500);
+                
+                // Show success message
+                showMessage("Новая цитата сгенерирована!");
+                
+                // Add particle effect
+                createParticleEffect();
+                
+                console.log('Quote updated successfully!'); // Debug log
+                
+            }, 300);
+        });
+        
+
+        
+        // Адаптивность для мобильных устройств
+        function handleResize() {
+            if (window.innerWidth < 768) {
+                document.querySelectorAll('.flying-saucer').forEach(saucer => {
+                    saucer.style.display = 'none';
+                });
+            } else {
+                document.querySelectorAll('.flying-saucer').forEach(saucer => {
+                    saucer.style.display = 'block';
+                });
+            }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        
+        // Performance optimizations
+        function optimizePerformance() {
+            // Lazy load images
+            const images = document.querySelectorAll('img[loading="lazy"]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.src; // Trigger load
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            images.forEach(img => imageObserver.observe(img));
+            
+            // Reduce animations on mobile
+            if (window.innerWidth < 768) {
+                document.documentElement.style.setProperty('--animation-duration', '0.5s');
+            }
+        }
+        
+        // Initialize optimizations
+        optimizePerformance();
+        
+        // Image error handling and fallback
+        function handleImageError(img) {
+            img.onerror = function() {
+                // Create a fallback image with character initial
+                const canvas = document.createElement('canvas');
+                canvas.width = 160;
+                canvas.height = 160;
+                const ctx = canvas.getContext('2d');
+                
+                // Create gradient background
+                const gradient = ctx.createLinearGradient(0, 0, 160, 160);
+                gradient.addColorStop(0, '#00ff00');
+                gradient.addColorStop(1, '#0099ff');
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 160, 160);
+                
+                // Add character initial
+                ctx.fillStyle = 'white';
+                ctx.font = 'bold 48px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                const characterName = img.alt;
+                const initial = characterName.charAt(0);
+                ctx.fillText(initial, 80, 80);
+                
+                // Replace broken image with canvas
+                img.src = canvas.toDataURL();
+                img.onerror = null; // Prevent infinite loop
+            };
+        }
+        
+        // Force reload images and handle loading
+        function forceReloadImages() {
+            const characterImages = document.querySelectorAll('.character-card img');
+            characterImages.forEach((img, index) => {
+                // Add loading indicator
+                img.style.opacity = '0.5';
+                
+                // Force reload by adding timestamp
+                const originalSrc = img.src;
+                const timestamp = new Date().getTime();
+                img.src = originalSrc + '?t=' + timestamp;
+                
+                // Handle successful load
+                img.onload = function() {
+                    this.style.opacity = '1';
+                    this.style.transition = 'opacity 0.3s ease';
+                };
+                
+                // Handle error
+                img.onerror = function() {
+                    this.style.opacity = '1';
+                    this.style.background = 'linear-gradient(45deg, #00ff00, #0099ff)';
+                    this.style.display = 'flex';
+                    this.style.alignItems = 'center';
+                    this.style.justifyContent = 'center';
+                    this.style.color = 'white';
+                    this.style.fontSize = '1.5rem';
+                    this.style.fontWeight = 'bold';
+                    this.textContent = this.alt.charAt(0);
+                };
+            });
+        }
+        
+        // Apply error handling to all character images
+        document.addEventListener('DOMContentLoaded', function() {
+            const characterImages = document.querySelectorAll('.character-card img');
+            characterImages.forEach(handleImageError);
+            
+            // Force reload images after a short delay
+            setTimeout(forceReloadImages, 1000);
+        });
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Close any open modals
+                const modals = document.querySelectorAll('.fixed.inset-0');
+                modals.forEach(modal => {
+                    if (modal.style.display !== 'none') {
+                        modal.remove();
+                    }
+                });
+            }
+            
+            if (e.key === 'Enter') {
+                // Quick restart game - removed since game was deleted
+                console.log('Enter key pressed');
+            }
+        });
+        
+        // Add touch gestures for mobile with improved handling
+        let touchStartY = 0;
+        let touchEndY = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        document.addEventListener('touchstart', (e) => {
+            touchStartY = e.changedTouches[0].screenY;
+            touchStartX = e.changedTouches[0].screenX;
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            touchEndY = e.changedTouches[0].screenY;
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diffY = touchStartY - touchEndY;
+            const diffX = touchStartX - touchEndX;
+            
+            // Only trigger if it's more of a vertical swipe
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > swipeThreshold) {
+                if (diffY > 0) {
+                    // Swipe up - activate portal
+                    activatePortal();
+                } else {
+                    // Swipe down - show message instead of speakRick
+                    showMessage("Свайп вниз! Wubba lubba dub dub!");
+                }
+            }
+        }
+        
+        // Add Easter eggs
+        let konamiCode = [];
+        const konamiSequence = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]; // Up, Up, Down, Down, Left, Right, Left, Right, B, A
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.keyCode);
+            if (konamiCode.length > konamiSequence.length) {
+                konamiCode.shift();
+            }
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                // Konami code activated!
+                createParticleEffect();
+                showMessage("KONAMI CODE! Wubba lubba dub dub!");
+                konamiCode = [];
+            }
+        });
+        
+        // Initialize with a random quote
+        if (generateQuoteBtn && quoteText && quoteContext) {
+            generateQuoteBtn.click();
+            console.log('Quote generator initialized!');
+        } else {
+            console.error('Failed to initialize quote generator!');
+        }
+        
+        }); // Close DOMContentLoaded
+        
+        // Add loading screen transition
+        document.getElementById('loadingScreen').style.transition = 'opacity 0.5s ease';
+    </script>
+</body>
+</html>
